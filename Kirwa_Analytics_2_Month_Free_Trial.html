@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kirwa Analytics - Advanced School Platform</title>
+<style>
+:root{--primary:#0284c7;--primary-dark:#0369a1;--secondary:#0f172a;--success:#16a34a;--warning:#ea580c;--danger:#dc2626;--light:#f8fafc;--border:#cbd5e1}*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}body{background:#f1f5f9;color:var(--secondary);padding-bottom:50px;min-height:100vh}header{background:var(--secondary);color:#fff;padding:15px;text-align:center;font-weight:bold;font-size:1.3rem;box-shadow:0 4px 6px #0002}.logo-box{font-size:1.8rem;margin-bottom:5px}.container{width:95%;max-width:1200px;margin:15px auto}.card{background:#fff;padding:18px;border-radius:12px;box-shadow:0 4px 6px -1px #0002;margin-bottom:15px;border:1px solid #e2e8f0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:15px}.form-group{margin-bottom:12px}label{display:block;font-size:.85rem;font-weight:600;margin-bottom:5px;color:#475569}input,select,textarea{width:100%;padding:11px;border:1px solid var(--border);border-radius:8px;font-size:.95rem;background:#fff}button{background:var(--primary);color:#fff;padding:11px 15px;border:0;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;margin:3px 0}button:hover{background:var(--primary-dark)}button.secondary{background:#64748b}button.danger{background:var(--danger)}button.success{background:var(--success)}button.small{width:auto;padding:7px 10px;font-size:.8rem}.nav-controls{display:flex;justify-content:space-between;gap:10px;margin-bottom:12px}.nav-btn{width:auto;background:#e2e8f0;color:var(--secondary)}.nav-tabs{display:flex;overflow-x:auto;background:#fff;border-bottom:1px solid var(--border);margin:12px 0}.tab-btn{width:auto;background:none;color:#64748b;white-space:nowrap;border-radius:0}.tab-btn.active{color:var(--primary);border-bottom:3px solid var(--primary)}.hidden{display:none!important}.alert{padding:12px;border-radius:8px;margin-bottom:12px;background:#e0f2fe;color:#0369a1}.badge{padding:4px 9px;border-radius:12px;font-size:.75rem;font-weight:700;color:#fff;background:var(--success)}table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.85rem;background:#fff}th,td{border:1px solid var(--border);padding:8px;text-align:left}th{background:#f1f5f9}tr:nth-child(even){background:#f8fafc}.table-wrap{overflow-x:auto}.muted{color:#64748b;font-size:.85rem}.stat{padding:14px;border:1px solid var(--border);border-radius:9px;background:#f8fafc}.stat b{font-size:1.35rem;display:block;color:var(--primary)}.actions{display:flex;gap:7px;flex-wrap:wrap}.actions button{flex:1;min-width:120px}.section-title{margin-bottom:10px;color:var(--primary)}
+.report-ee1{border:5px double #15803d;background:#f0fdf4}.report-ee2{border:5px double #0f766e;background:#f0fdfa}.report-me{border:5px solid #2563eb;background:#eff6ff}.report-ae{border:5px solid #d97706;background:#fffbeb}.report-be{border:5px solid #64748b;background:#f8fafc}.release-head{text-align:center;border-bottom:3px double #334155;padding:12px;margin-bottom:12px}.release-foot{margin-top:24px;display:flex;justify-content:space-between}.pill{display:inline-block;padding:4px 8px;border-radius:8px;background:#e2e8f0;font-weight:bold}.report-sheet{padding:22px;border-radius:12px;page-break-after:always}.report-sheet h2,.report-sheet h3{text-align:center;margin:8px}.report-sheet table{font-size:12px}.report-sheet th{background:#dbeafe}.report-sheet .meta{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:12px 0}@media print{body{background:#fff}.report-sheet{box-shadow:none;break-after:page}}
+</style></head><body>
+<header><div class="logo-box">📊✨🦅</div><div>KIRWA ANALYTICS</div><p style="font-size:.8rem;font-weight:400;opacity:.9;margin-top:3px">Next-Generation Educational Assessment Matrix Platform</p></header>
+<div class="container"><div class="nav-controls"><button class="nav-btn" onclick="goBack()">⬅️ Back View</button><button class="nav-btn" onclick="goForward()">Forward View ➡️</button></div><div id="notice" class="alert hidden"></div>
+<section id="auth" class="card"><h2 style="text-align:center;margin-bottom:7px">Welcome to Kirwa Analytics</h2><p class="muted" style="text-align:center;margin-bottom:15px">School assessment, marks processing and performance analytics.</p><div class="nav-tabs"><button id="loginTab" class="tab-btn active" onclick="showAuth('login')">Existing Account Sign-In</button><button id="regTab" class="tab-btn" onclick="showAuth('register')">Create School Account (HOE First)</button></div>
+<div id="loginPanel"><div class="form-group"><label>Workspace Portal Role</label><select id="loginRole"><option value="HOE">Head of Examination (HOE)</option><option value="CT">Class Teacher</option><option value="TR">Subject Room Teacher</option><option value="HOS">Head of School (HOS)</option><option value="HOD">HOD</option><option value="BURSAR">Bursar</option><option value="DEPUTY">Deputy</option><option value="LIBRARIAN">Librarian</option><option value="SECRETARY">Secretary</option><option value="PRINCIPAL">Principal</option><option value="LEARNER">Learner</option><option value="PARENT">Parent</option></select></div><div class="form-group"><label>School Code</label><input id="loginCode" placeholder="e.g. KIRWADIGITAL"></div><div class="form-group"><label>Staff email</label><input id="loginEmail" type="email" placeholder="name@example.com"></div><div class="form-group"><label>Personal Access Password</label><input id="loginPass" type="password"></div><div class="form-group"><label>Master School Security Password</label><input id="loginMaster" type="password"></div><button onclick="login()">Access Secure Portal Room</button></div>
+<div id="registerPanel" class="hidden"><div class="alert">The Head of Examination must register the school first. Use a dedicated password, not your Gmail password.</div><div class="form-group"><label>Unique School Code</label><input id="regCode" placeholder="e.g. KIRWAPRIMARY"></div><div class="form-group"><label>Official School Name</label><input id="regName" placeholder="School name"></div><div class="form-group"><label>HOE email</label><input id="regEmail" type="email"></div><div class="form-group"><label>HOE Access Password</label><input id="regPass" type="password"></div><div class="form-group"><label>Master School Password</label><input id="regMaster" type="password"></div><button class="success" onclick="registerSchool()">Initialize School Account</button></div></section>
+<section id="portal" class="hidden"><div class="card" style="display:flex;justify-content:space-between;align-items:center;background:var(--secondary);color:white"><div><b id="userDisplay"></b><div id="schoolDisplay" class="muted" style="color:#cbd5e1"></div></div><button class="danger small" onclick="logout()">Exit Secure Node</button></div><div id="modules"></div></section></div>
+<script>
+'use strict';
+const STORE='kirwa_analytics_v3_schools';let current={code:null,role:null,email:null},historyViews=[],historyIndex=-1,activeTab='';
+const $=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function allSchools(){try{return JSON.parse(localStorage.getItem(STORE)||'{}')}catch(e){return {}}}function saveSchools(x){localStorage.setItem(STORE,JSON.stringify(x))}function school(){return allSchools()[current.code]}function saveSchool(s){let a=allSchools();a[current.code]=s;saveSchools(a)}function msg(t){$('notice').textContent=t;$('notice').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'})}function hideMsg(){$('notice').classList.add('hidden')}
+function showAuth(t){$('loginPanel').classList.toggle('hidden',t!=='login');$('registerPanel').classList.toggle('hidden',t!=='register');$('loginTab').classList.toggle('active',t==='login');$('regTab').classList.toggle('active',t==='register')}
+function registerSchool(){let code=$('regCode').value.trim().toUpperCase(),name=$('regName').value.trim(),email=$('regEmail').value.trim().toLowerCase(),pass=$('regPass').value,master=$('regMaster').value;if(!code||!name||!email||!pass||!master)return alert('Complete all registration fields.');if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return alert('Enter a valid email address.');let a=allSchools();if(a[code])return alert('That school code is already registered.');const trialStart=new Date(),trialEnd=new Date(trialStart.getTime()+60*24*60*60*1000);a[code]={code,name,master,hoe:{email,pass},staff:[],classes:{},exams:[],locked:false,broadcasts:[],subscriptions:{school:null,learners:{},parents:{},payments:[],trialStart:trialStart.toISOString(),trialEndsAt:trialEnd.toISOString()}};saveSchools(a);alert('School registered successfully. Your school has a 2-month free subscription trial starting today. Sign in as HOE.');showAuth('login');$('loginCode').value=code;$('loginRole').value='HOE';$('loginEmail').value=email}
+function login(){let role=$('loginRole').value,code=$('loginCode').value.trim().toUpperCase(),email=$('loginEmail').value.trim().toLowerCase(),pass=$('loginPass').value,master=$('loginMaster').value,s=allSchools()[code];if(!code||!email||!pass||!master)return alert('Enter all sign-in details.');if(!s)return alert('School code not found on this device.');if(master!==s.master)return alert('Incorrect master school password.');let valid=role==='HOE'?s.hoe.email===email&&s.hoe.pass===pass:(s.staff||[]).some(x=>x.role===role&&x.email===email&&x.pass===pass);if(!valid)return alert('Staff account details are incorrect or not registered. Ask the HOE to create your staff account.');current={code,role,email};$('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('userDisplay').textContent=role+' : '+email;$('schoolDisplay').textContent='School Node: '+code+' ('+s.name+')';historyViews=[];historyIndex=-1;render();pushHistory();hideMsg()}
+function logout(){current={code:null,role:null,email:null};$('portal').classList.add('hidden');$('auth').classList.remove('hidden');$('modules').innerHTML='';historyViews=[];historyIndex=-1}
+function pushHistory(){let snap={role:current.role,tab:activeTab};historyViews=historyViews.slice(0,historyIndex+1);historyViews.push(snap);historyIndex=historyViews.length-1}function goBack(){if(historyIndex>0){historyIndex--;activeTab=historyViews[historyIndex].tab;render()}else msg('No previous workspace view.')}function goForward(){if(historyIndex<historyViews.length-1){historyIndex++;activeTab=historyViews[historyIndex].tab;render()}else msg('No next workspace view.')}
+function pct(raw,out){return out>0?Math.round(Number(raw)/Number(out)*100):0}function grade(p,sys){if(sys==='CBC'){if(p>=85)return'EE1';if(p>=73)return'EE2';if(p>=60)return'ME1';if(p>=48)return'ME2';if(p>=36)return'AE1';if(p>=24)return'AE2';if(p>=15)return'BE1';return'BE2'}if(p>=80)return'A';if(p>=75)return'A−';if(p>=70)return'B+';if(p>=65)return'B';if(p>=60)return'B−';if(p>=55)return'C+';if(p>=50)return'C';if(p>=45)return'C−';if(p>=40)return'D+';if(p>=35)return'D';if(p>=30)return'D−';return'E'}
+function gradePoints(p,sys){let g=grade(p,sys);if(sys==='CBC')return ({EE1:8,EE2:7,ME1:6,ME2:5,AE1:4,AE2:3,BE1:2,BE2:1})[g]||0;return ({A:12,'A−':11,'B+':10,B:9,'B−':8,'C+':7,C:6,'C−':5,'D+':4,D:3,'D−':2,E:1})[g]||0}
+function render(){let s=school();if(!s)return logout();if(current.role==='HOE')renderHOE(s);else if(current.role==='CT')renderCT(s);else if(current.role==='TR')renderTR(s);else renderHOS(s)}
+function tab(name){activeTab=name;render();pushHistory()}
+function renderHOE(s){$('modules').innerHTML=`<div class="card"><h3>HOE Administrative Workspace Panel</h3><div class="nav-tabs"><button class="tab-btn ${activeTab==='classes'?'active':''}" onclick="tab('classes')">Structure Setup</button><button class="tab-btn ${activeTab==='staff'?'active':''}" onclick="tab('staff')">Staff Accounts</button><button class="tab-btn ${activeTab==='exams'?'active':''}" onclick="tab('exams')">Assessment Cycles</button><button class="tab-btn ${activeTab==='audit'?'active':''}" onclick="tab('audit')">Audit & Locking</button><button class="tab-btn ${activeTab==='comms'?'active':''}" onclick="tab('comms')">Announcements</button></div><div id="hoeContent">${hoeContent(s)}</div></div>`}
+function hoeContent(s){if(activeTab==='staff')return `<h4 class="section-title">Create staff login accounts</h4><div class="grid"><div class="form-group"><label>Staff email</label><input id="staffEmail" type="email"></div><div class="form-group"><label>Temporary access password</label><input id="staffPass" type="password"></div><div class="form-group"><label>Role</label><select id="staffRole"><option value="CT">Class Teacher</option><option value="TR">Subject Teacher</option><option value="HOS">Head of School</option></select></div></div><button onclick="addStaff()">Create Staff Account</button>${table(['Email','Role'],(s.staff||[]).map(x=>[esc(x.email),esc(x.role)]))}`;
+if(activeTab==='exams')return `<h4 class="section-title">Deploy assessment window</h4><div class="grid"><div class="form-group"><label>Exam name</label><input id="examName" placeholder="Mid-Term Examination"></div><div class="form-group"><label>Term</label><select id="examTerm"><option>Term 1</option><option>Term 2</option><option>Term 3</option></select></div><div class="form-group"><label>Exam type</label><select id="examType"><option>Regular</option><option>End-Term Combined</option><option>Speed Test</option><option>SPA</option></select></div></div><button onclick="addExam()">Create Assessment Cycle</button>${table(['Exam','Term','Type'],s.exams.map(e=>[esc(e.name),esc(e.term),esc(e.type)]))}`;
+if(activeTab==='audit')return `<h4 class="section-title">School data audit</h4><p>School lock status: <b>${s.locked?'LOCKED':'UNLOCKED'}</b></p><div class="actions"><button class="${s.locked?'success':'danger'}" onclick="toggleLock()">${s.locked?'Unlock Marks Entry':'Lock Marks Entry'}</button><button class="secondary" onclick="downloadSchoolBackup()">Download Data Backup</button><button class="danger" onclick="resetSchool()">Reset Entire School Structure</button></div><p class="muted">Locking prevents teachers from entering or changing marks.</p>`;
+if(activeTab==='comms')return `<h4 class="section-title">Staff announcement board</h4><textarea id="broadcastMsg" rows="3" placeholder="Write a school announcement..."></textarea><button onclick="broadcast()">Publish Announcement</button>${(s.broadcasts||[]).slice().reverse().map(b=>`<div class="alert" style="margin-top:8px">${esc(b.msg)}<div class="muted">${esc(b.date)}</div></div>`).join('')}`;
+return `<div class="grid"><div class="card"><h4>Add Class / Stream</h4><div class="form-group"><label>Class identifier</label><input id="className" placeholder="Grade 10 East / Form 1 West"></div><div class="form-group"><label>Curriculum</label><select id="classSystem"><option value="CBC">CBE / CBC</option><option value="844">8-4-4</option></select></div><div class="form-group"><label>Pathway (CBE)</label><select id="pathway"><option>STEM</option><option>Social Sciences</option><option>Arts & Sports Science</option></select></div><div class="form-group"><label>Subjects (comma separated)</label><textarea id="classSubjects" rows="3" placeholder="English, Mathematics, Biology"></textarea></div><button onclick="addClass()">Register Class Stream</button></div></div><h4>Registered classes</h4>${table(['Class','System','Pathway','Subjects','Learners'],Object.entries(s.classes).map(([n,c])=>[esc(n),esc(c.system),esc(c.pathway||'—'),esc(c.subjects.join(', ')),Object.keys(c.students).length]))}`}
+function table(headers,rows){return `<div class="table-wrap"><table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(r=>`<tr>${r.map(v=>`<td>${v}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${headers.length}">No records available.</td></tr>`}</tbody></table></div>`}
+function addClass(){let n=$('className').value.trim(),sys=$('classSystem').value,subjects=$('classSubjects').value.split(',').map(x=>x.trim()).filter(Boolean);if(!n||!subjects.length)return alert('Enter a class name and at least one subject.');let s=school();if(s.classes[n])return alert('Class already exists.');s.classes[n]={system:sys,pathway:sys==='CBC'?$('pathway').value:'',subjects:[...new Set(subjects)],students:{}};saveSchool(s);render();msg('Class stream registered.')}
+function addLearner(){let cls=$('learnerClass').value,adm=$('learnerAdm').value.trim(),name=$('learnerName').value.trim();if(!cls||!adm||!name)return alert('Complete learner details.');let s=school();if(!s.classes[cls])return alert('Select a valid class.');if(s.classes[cls].students[adm])return alert('Admission number already exists in this class.');s.classes[cls].students[adm]={adm,name,marks:{}};saveSchool(s);render();msg('Learner registered successfully.')}
+function addStaff(){let email=$('staffEmail').value.trim().toLowerCase(),pass=$('staffPass').value,role=$('staffRole').value;if(!email||!pass)return alert('Enter staff email and password.');let s=school();if(s.staff.some(x=>x.email===email))return alert('Staff email already registered.');s.staff.push({email,pass,role});saveSchool(s);render();msg('Staff account created. Share login details securely.')}
+function addExam(){let name=$('examName').value.trim(),term=$('examTerm').value,type=$('examType').value;if(!name)return alert('Enter an exam name.');let s=school();if(s.exams.some(e=>e.name.toLowerCase()===name.toLowerCase()))return alert('An exam with this name already exists.');s.exams.push({name,term,type,date:new Date().toLocaleDateString()});saveSchool(s);render();msg('Assessment cycle created.')}
+function toggleLock(){let s=school();s.locked=!s.locked;saveSchool(s);render();msg(s.locked?'Marks entry locked.':'Marks entry unlocked.')}
+function broadcast(){let m=$('broadcastMsg').value.trim();if(!m)return alert('Write an announcement first.');let s=school();s.broadcasts.push({msg:m,date:new Date().toLocaleString()});saveSchool(s);render();msg('Announcement published.')}
+function resetSchool(){if(!confirm('This permanently removes all classes, learners, marks, exams and announcements for this school on this device. Continue?'))return;let s=school();s.classes={};s.exams=[];s.broadcasts=[];s.locked=false;saveSchool(s);render();msg('School structure reset. School login remains active.')}
+function classOptions(s){return Object.keys(s.classes).map(c=>`<option>${esc(c)}</option>`).join('')}
+function renderTR(s){$('modules').innerHTML=`<div class="card"><h3>Subject Teacher Workspace</h3><div class="grid"><div class="form-group"><label>Class / Stream</label><select id="trClass" onchange="populateSubjects()">${classOptions(s)}</select></div><div class="form-group"><label>Subject</label><select id="trSubject"></select></div><div class="form-group"><label>Assessment</label><select id="trExam">${s.exams.map(e=>`<option value="${esc(e.name)}">${esc(e.name)} — ${esc(e.term)}</option>`).join('')}</select></div><div class="form-group"><label>Maximum marks</label><input id="trOut" type="number" min="1" value="100"></div></div><button onclick="loadLedger()">Load Marks Entry Ledger</button><div id="ledger" class="card" style="margin-top:12px">Select a class, subject and assessment.</div></div>`;populateSubjects()}
+function populateSubjects(){let s=school(),c=$('trClass')?.value,el=$('trSubject');if(!el)return;el.innerHTML=(s.classes[c]?.subjects||[]).map(x=>`<option>${esc(x)}</option>`).join('')||'<option value="">No subjects</option>'}
+function loadLedger(){let s=school(),cls=$('trClass').value,sub=$('trSubject').value,ex=$('trExam').value,out=Number($('trOut').value);if(s.locked)return alert('Marks entry is locked by HOE.');if(!cls||!sub||!ex||!Number.isFinite(out)||out<=0)return alert('Complete the marks configuration.');let learners=Object.values(s.classes[cls].students);if(!learners.length){$('ledger').innerHTML='No learners registered in this class.';return}let rows=learners.map(st=>{let v=st.marks[ex]?.[sub]?.raw??'';return `<tr><td>${esc(st.adm)}</td><td>${esc(st.name)}</td><td><input type="number" min="0" max="${out}" step="any" class="markInput" data-adm="${esc(st.adm)}" value="${v}" style="max-width:110px"></td><td>${v===''?'—':pct(v,out)+'%'}</td></tr>`}).join('');$('ledger').innerHTML=`<h4>${esc(cls)} — ${esc(sub)} — ${esc(ex)} (out of ${out})</h4>${table(['ADM','Learner','Mark','Current %'],[]).replace('<tbody><tr><td colspan="4">No records available.</td></tr></tbody>',`<tbody>${rows}</tbody>`)}<button class="success" onclick="saveMarks('${encodeURIComponent(cls)}','${encodeURIComponent(ex)}','${encodeURIComponent(sub)}')">Save Marks</button>`;window.currentOut=out}
+function saveMarks(cls0,ex0,sub0){let cls=decodeURIComponent(cls0),ex=decodeURIComponent(ex0),sub=decodeURIComponent(sub0),out=Number(window.currentOut),inputs=[...document.querySelectorAll('.markInput')];if(school().locked)return alert('Marks entry is locked.');for(let i of inputs){if(i.value!==''&&(!Number.isFinite(Number(i.value))||Number(i.value)<0||Number(i.value)>out))return alert('Every mark must be between 0 and '+out+'.')}let s=school();inputs.forEach(i=>{let st=s.classes[cls].students[i.dataset.adm];if(!st.marks[ex])st.marks[ex]={};if(i.value==='')delete st.marks[ex][sub];else st.marks[ex][sub]={raw:Number(i.value),outOf:out,pct:pct(i.value,out)}});saveSchool(s);alert('Marks saved and percentages calculated.');loadLedger()}
+function renderCT(s){$('modules').innerHTML=`<div class="card"><h3>Class Teacher Workspace</h3><div class="grid"><div><h4>Register a class / stream</h4><label>Class (e.g. Grade 10 East or Form 2 West)</label><input id="ctNewClass"><label>Curriculum</label><select id="ctNewSystem" onchange="document.getElementById('ctPathwayWrap').style.display=this.value==='CBC'?'block':'none'"><option value="CBC">CBE / CBC</option><option value="844">8-4-4</option></select><div id="ctPathwayWrap"><label>Pathway (CBE only)</label><select id="ctNewPathway"><option>STEM</option><option>Social Sciences</option><option>Arts and Sports Science</option></select></div><label>Subjects (comma separated)</label><textarea id="ctNewSubjects"></textarea><button onclick="ctAddClass()">Register Class</button></div><div><h4>Register learner</h4><label>Class / Stream</label><select id="ctClass" onchange="showClassRoster()">${classOptions(s)}</select><label>Admission number</label><input id="ctAdm"><label>Learner full name</label><input id="ctName"><div id="ctCbeFields"><label>CBE Assessment Number (CBE only)</label><input id="ctAssessment"><label>Pathway</label><select id="ctLearnerPathway"><option>STEM</option><option>Social Sciences</option><option>Arts and Sports Science</option></select></div><label>Parent / Guardian phone</label><input id="ctParentPhone" type="tel" placeholder="07XXXXXXXX"><button onclick="ctAddLearner()">Register Learner</button></div></div><div class="form-group"><label>Select class roster</label><select id="ctRosterClass" onchange="showClassRoster()">${classOptions(s)}</select></div><div id="ctRoster"></div><div id="ctReleased"></div></div>`;let el=$('ctRosterClass');if(el)$('ctClass').value=el.value;showClassRoster();showCTReleased()}
+function ctAddClass(){let s=school(),n=$('ctNewClass').value.trim(),sys=$('ctNewSystem').value,subjects=$('ctNewSubjects').value.split(',').map(x=>x.trim()).filter(Boolean);if(!n||!subjects.length)return alert('Enter class name and subjects.');if(s.classes[n])return alert('That class already exists.');s.classes[n]={system:sys,pathway:sys==='CBC'?$('ctNewPathway').value:'',subjects:[...new Set(subjects)],students:{},teacher:current.email};saveSchool(s);render();msg('Class registered. HOS can now see it in the school class list.')}
+function ctAddLearner(){let s=school(),cls=$('ctClass').value,c=s.classes[cls],adm=$('ctAdm').value.trim(),name=$('ctName').value.trim(),phone=$('ctParentPhone').value.trim();if(!c||!adm||!name||!phone)return alert('Complete class, admission number, learner name and parent phone.');if(c.students[adm])return alert('Admission number already exists in this class.');let cbe=c.system==='CBC',assessment=cbe?$('ctAssessment').value.trim():'',pathway=cbe?$('ctLearnerPathway').value:'';if(cbe&&!assessment)return alert('CBE assessment number is required.');c.students[adm]={adm,name,className:cls,parentPhone:phone,assessmentNumber:assessment,pathway,marks:{},released:{}};saveSchool(s);render();msg('Learner registered successfully.')}
+function showCTReleased(){let s=school(),cls=$('ctClass')?.value||$('ctRosterClass')?.value;if(!$('ctReleased'))return;let c=s.classes[cls];if(!c)return;$('ctReleased').innerHTML='<h4>Released report forms</h4>'+s.exams.filter(e=>e.released&&e.releasedClasses?.includes(cls)).map(e=>`<div class="alert">${esc(e.name)} — results released <button class="small" onclick="printClassReports('${encodeURIComponent(cls)}','${encodeURIComponent(e.name)}')">Print class report forms</button></div>`).join('')||'<p class="muted">No released report forms yet.</p>'}
+function showClassRoster(){let s=school(),c=$('ctClass')?.value||$('ctRosterClass')?.value;if(!c||!s.classes[c]){$('ctRoster').innerHTML='No class selected.';return}if($('ctRosterClass'))$('ctRosterClass').value=c;let cls=s.classes[c],students=Object.values(cls.students);$('ctRoster').innerHTML=`<h4>${esc(c)} — Learner Roster (${students.length})</h4>${table(['ADM','Learner','Assessment No.','Parent phone','Pathway'],students.map(st=>[esc(st.adm),esc(st.name),esc(st.assessmentNumber||'—'),esc(st.parentPhone||'—'),esc(cls.system==='CBC'?(st.pathway||cls.pathway||'—'):'Not applicable')]))}<button class="secondary" onclick="downloadClassReport('${encodeURIComponent(c)}')">Download Class Roster</button><p class="muted">SMS requires your phone messaging app or a connected SMS gateway. This offline version prepares messages for review; it cannot silently send bulk SMS.</p><button onclick="sendClassMarks('${encodeURIComponent(c)}')">Prepare marks SMS for parents</button>`;showCTReleased()}
+function sendClassMarks(c0){let cls=decodeURIComponent(c0),s=school(),c=s.classes[cls],exam=prompt('Enter the exact examination name to send:');if(!exam)return;let links=[];Object.values(c.students).forEach(st=>{let ex=st.marks[exam]||{},items=Object.entries(ex).map(([sub,m])=>sub+': '+m.raw+'/'+m.outOf).join(', ');if(st.parentPhone&&items)links.push({phone:st.parentPhone,text:`${s.name}: Results for ${st.name} (${st.adm}), ${exam}. ${items}. Please contact the school for clarification.`})});if(!links.length)return alert('No parent phone numbers or saved marks found.');let first=links[0];if(links.length>1){alert('Your phone will open its SMS app for each parent. SMS is not sent automatically by this offline website; review and tap Send for each message.');}links.forEach((x,i)=>{let url='sms:'+encodeURIComponent(x.phone)+'?body='+encodeURIComponent(x.text);if(i===0)window.location.href=url;else setTimeout(()=>window.open(url,'_blank'),i*900)});}
+function downloadClassReport(c0){let c=decodeURIComponent(c0),s=school(),cls=s.classes[c];let body=`<h3>${esc(c)} Learner Roster</h3>${table(['ADM','Learner','Assessment No.','Parent phone'],Object.values(cls.students).map(x=>[esc(x.adm),esc(x.name),esc(x.assessmentNumber||'—'),esc(x.parentPhone||'—')]))}`;printReport('Class Roster',body)}
+function printClassReports(c0,e0){let cls=decodeURIComponent(c0),exam=decodeURIComponent(e0),s=school(),c=s.classes[cls],html=Object.values(c.students).map(st=>reportFormHTML(s,c,st,exam)).join('');printReport('Learner Report Forms — '+cls,html)}
+function reportFormHTML(s,c,st,exam){let marks=st.marks[exam]||{},rows=c.subjects.map(sub=>{let m=marks[sub],p=m?m.pct:null;return [esc(sub),m?m.raw+'/'+m.outOf:'Missing',m?grade(p,c.system):'—',m?p+'%':'—']});let vals=Object.values(marks),total=vals.reduce((a,m)=>a+Number(m.raw),0),out=vals.reduce((a,m)=>a+Number(m.outOf),0),average=out?Math.round(total/out*100):0,level=grade(average,c.system),points=vals.reduce((a,m)=>a+gradePoints(m.pct,c.system),0),klass=c.system==='CBC'?(average>=85?'report-ee1':average>=73?'report-ee2':average>=60?'report-me':average>=36?'report-ae':'report-be'):(average>=75?'report-ee1':average>=60?'report-me':average>=40?'report-ae':'report-be');return `<section class="report-sheet ${klass}"><div class="release-head"><h2>${esc(s.name)}</h2><h3>LEARNER ACADEMIC REPORT</h3><b>${esc(exam)} | ${esc(c.system==='CBC'?'CBE / CBC':'8-4-4')}</b></div><div class="meta"><div>Learner: <b>${esc(st.name)}</b></div><div>Admission No: <b>${esc(st.adm)}</b></div><div>Class: <b>${esc(st.className||'')}</b></div><div>Assessment No: <b>${esc(c.system==='CBC'?st.assessmentNumber||'—':'Not applicable')}</b></div><div>Pathway: <b>${esc(c.system==='CBC'?st.pathway||c.pathway||'—':'Not applicable')}</b></div><div>Parent phone: <b>${esc(st.parentPhone||'—')}</b></div></div>${table(['Learning Area / Subject','Mark','Grade / Level','Percentage'],rows)}<p><b>Total:</b> ${total}/${out||'—'} &nbsp; <b>Average:</b> ${average}% &nbsp; <b>Achievement:</b> ${esc(level)} &nbsp; <b>Mean points:</b> ${points}/${c.subjects.length*(c.system==='CBC'?8:12)}</p><p>Class teacher comment: __________________________________________</p><p>HOD / Headteacher comment: ______________________________________</p><div class="release-foot"><span>Class Teacher: __________________</span><span>Headteacher: __________________</span></div></section>`}
+function renderHOS(s){let classes=Object.entries(s.classes);$('modules').innerHTML=`<div class="card"><h3>Head of School — Examination Control</h3><div class="grid"><div class="stat"><b>${classes.length}</b>Classes / streams</div><div class="stat"><b>${classes.reduce((n,[k,c])=>n+Object.keys(c.students).length,0)}</b>Learners</div><div class="stat"><b>${s.exams.length}</b>Examinations</div></div><h4>Classes grouped by curriculum and grade/form</h4>${table(['Curriculum','Grade / Form / Stream','Learners','Subjects'],classes.map(([n,c])=>[c.system==='CBC'?'CBE / CBC':'8-4-4',esc(n),Object.keys(c.students).length,esc(c.subjects.join(', '))]))}<h4>Examination release control</h4>${s.exams.map((e,i)=>`<div class="card"><b>${esc(e.name)}</b> — ${esc(e.term)}<p>${e.released?'Released':'Not released'}</p><button onclick="hosReleaseExam(${i})" ${e.released?'disabled':''}>${e.released?'Results Released':'Check missing marks and release results'}</button>${e.released?'<button class="secondary" onclick="downloadMeritAll('+i+')">Download released school merit lists</button>':''}</div>`).join('')}<h4>Missing Marks Audit</h4>${missingAudit(s)}<button class="secondary" onclick="downloadSchoolBackup()">Download Data Backup</button></div>`}
+function hosReleaseExam(i){let s=school(),e=s.exams[i],missing=[];Object.entries(s.classes).forEach(([cls,c])=>Object.values(c.students).forEach(st=>c.subjects.forEach(sub=>{if(!st.marks[e.name]?.[sub])missing.push(cls+' — '+st.name+' — '+sub)})));if(missing.length){alert('Cannot release. Missing marks found ('+missing.length+'). First missing: '+missing.slice(0,8).join('; '));return}if(!confirm('All class subject marks are present. Release '+e.name+' results and make report forms available to class teachers?'))return;e.released=true;e.releaseDate=new Date().toLocaleString();e.releasedClasses=Object.keys(s.classes);saveSchool(s);render();msg('Results released. Class teachers can now print learner report forms; merit lists are available here.')}
+function downloadMeritAll(i){let s=school(),e=s.exams[i];if(!e?.released)return alert('Release results first.');Object.entries(s.classes).forEach(([cls,c])=>{let sys=c.system,students=Object.values(c.students).map(st=>{let vals=c.subjects.map(sub=>st.marks[e.name]?.[sub]),raw=vals.reduce((a,m)=>a+(m?Number(m.raw):0),0),out=vals.reduce((a,m)=>a+(m?Number(m.outOf):0),0),avg=out?Math.round(raw/out*100):0;let points=vals.reduce((a,m)=>a+(m?gradePoints(m.pct,sys):0),0);return {st,raw,out,avg,level:grade(avg,sys),points,vals}}).sort((a,b)=>b.avg-a.avg);let body=`<div class="release-head"><h1>${esc(s.name)}</h1><h2>OFFICIAL EXAMINATION RESULTS & SCHOOL MERIT LIST</h2><h3>${esc(cls)} — ${esc(sys==='CBC'?'CBE / CBC':'8-4-4')} — ${esc(e.name)}</h3><p>Released: ${esc(e.releaseDate||'')}</p></div>${table(['Pos.','Admission No.','Learner Name',...c.subjects.map(esc),'Total','Average','Grade / Level','Mean points'],students.map((x,j)=>[j+1,esc(x.st.adm),esc(x.st.name),...x.vals.map(m=>m?m.raw:'—'),x.raw+'/'+x.out,x.avg+'%',esc(x.level),x.points+'/'+(c.subjects.length*(sys==='CBC'?8:12))]))}<div class="release-foot"><span>HOD: ____________________</span><span>Headteacher: ____________________</span></div><p style="text-align:center;margin-top:20px">OFFICIAL SCHOOL RESULT RELEASE DOCUMENT</p>`;printReport('Merit List — '+cls+' — '+e.name,body)})}
+function missingAudit(s){let rows=[];Object.entries(s.classes).forEach(([cls,c])=>Object.values(c.students).forEach(st=>s.exams.forEach(ex=>c.subjects.forEach(sub=>{if(!st.marks[ex.name]?.[sub])rows.push([esc(st.adm),esc(st.name),esc(cls),esc(ex.name),esc(sub)])}))));return table(['ADM','Learner','Class','Exam','Missing subject'],rows)}
+function reportHTML(title,body){return `<!doctype html><html><head><meta charset="utf-8"><title>${esc(title)}</title><style>body{font-family:Arial;padding:25px;color:#111}h1,h2{text-align:center}table{width:100%;border-collapse:collapse;margin-top:15px}td,th{border:1px solid #555;padding:7px;text-align:left}th{background:#eee}.meta{margin:20px 0}.report-ee1{border:5px double #15803d;background:#f0fdf4}.report-ee2{border:5px double #0f766e;background:#f0fdfa}.report-me{border:5px solid #2563eb;background:#eff6ff}.report-ae{border:5px solid #d97706;background:#fffbeb}.report-be{border:5px solid #64748b;background:#f8fafc}.release-head{text-align:center;border-bottom:3px double #334155;padding:12px;margin-bottom:12px}.release-foot{margin-top:24px;display:flex;justify-content:space-between}.pill{display:inline-block;padding:4px 8px;border-radius:8px;background:#e2e8f0;font-weight:bold}.report-sheet{padding:22px;border-radius:12px;page-break-after:always}.report-sheet h2,.report-sheet h3{text-align:center;margin:8px}.report-sheet table{font-size:12px}.report-sheet th{background:#dbeafe}.report-sheet .meta{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:12px 0}@media print{body{background:#fff}.report-sheet{box-shadow:none;break-after:page}}
+</style></head><body><h1>KIRWA ANALYTICS</h1><h2>${esc(title)}</h2><p class="meta">School: ${esc(school().name)} | School code: ${esc(current.code)} | Generated: ${new Date().toLocaleString()}</p>${body}<script>window.onload=()=>window.print()<\/script></body></html>`}
+function printReport(title,body){let w=window.open('','_blank');if(!w){alert('Allow pop-ups to print or save the report as PDF.');return}w.document.open();w.document.write(reportHTML(title,body));w.document.close()}
+function downloadClassReport(c0){let c=decodeURIComponent(c0),s=school(),cls=s.classes[c];let body=`<h3>${esc(c)} Learner Roster</h3>${table(['ADM','Learner'],Object.values(cls.students).map(x=>[esc(x.adm),esc(x.name)]))}`;printReport('Class Roster',body)}
+function downloadSchoolReport(){let s=school(),rows=[];Object.entries(s.classes).forEach(([cls,c])=>Object.values(c.students).forEach(st=>{let v=[];Object.values(st.marks).forEach(ex=>Object.values(ex).forEach(m=>v.push(m.pct)));let mean=v.length?Math.round(v.reduce((a,b)=>a+b,0)/v.length):0;rows.push([esc(st.adm),esc(st.name),esc(cls),mean+'%',grade(mean,c.system)])}));rows.sort((a,b)=>parseInt(b[3])-parseInt(a[3]));printReport('School Performance Report',table(['ADM','Learner','Class','Mean','Level'],rows))}
+function downloadSchoolBackup(){let blob=new Blob([JSON.stringify(school(),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=current.code+'_Kirwa_Analytics_Backup.json';a.click();URL.revokeObjectURL(url)}
+// Startup integrity check and safe handling of storage restrictions.
+try{if(!localStorage.getItem(STORE))localStorage.setItem(STORE,'{}')}catch(e){alert('This browser is blocking local storage. Enable site storage to use Kirwa Analytics.')}
+</script><style>
+/* KIRWA EXPANSION */
+.kirwa-shell{display:grid;grid-template-columns:250px minmax(0,1fr);gap:14px;align-items:start}.kirwa-side{background:#0f172a;color:#fff;border-radius:13px;padding:13px;position:sticky;top:8px;max-height:calc(100vh - 16px);overflow:auto}.kirwa-brand{font-size:1.15rem;font-weight:800;padding:10px;border-bottom:1px solid #334155;margin-bottom:10px}.kirwa-side button{background:transparent;text-align:left;color:#cbd5e1;margin:2px 0;padding:10px;font-weight:600}.kirwa-side button:hover,.kirwa-side button.active{background:#075985;color:white}.kirwa-main{min-width:0}.kirwa-top{display:flex;gap:8px;align-items:center;margin-bottom:12px}.kirwa-top input{flex:1}.kirwa-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;margin-bottom:14px}.kirwa-action{display:flex;gap:7px;flex-wrap:wrap}.kirwa-action button{width:auto;flex:1;min-width:120px}.kirwa-item{border:1px solid #e2e8f0;padding:12px;border-radius:10px;margin:8px 0;background:#fff}.kirwa-item h4{margin-bottom:6px}.kirwa-muted{font-size:.82rem;color:#64748b}.kirwa-two{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}.kirwa-menu-toggle{display:none!important}
+@media(max-width:760px){.kirwa-shell{grid-template-columns:1fr}.kirwa-side{position:fixed;z-index:50;top:0;bottom:0;left:-285px;width:270px;max-height:none;border-radius:0 14px 14px 0;transition:left .2s}.kirwa-side.open{left:0}.kirwa-menu-toggle{display:block!important;width:auto!important}.kirwa-top{flex-wrap:wrap}}
+</style>
+<script>
+const KIRWA_SECTIONS=[['dashboard','🏠','Dashboard'],['setup','🏫','School Setup'],['students','👨‍🎓','Students'],['staff','👩‍🏫','Teachers / Staff'],['results','📊','Results / Analytics'],['fees','💰','Fees'],['attendance','✅','Attendance'],['payroll','💵','Staff Payroll'],['discipline','⚠️','Discipline'],['library','📚','Library'],['reports','📋','HOD / Reports'],['exams','📝','Online Exams'],['homework','📄','PDF Homework'],['accounts','🔐','Login + Accounts']];
+let KIRWA_TAB='dashboard',KIRWA_QUERY='';
+function kInit(s){s.profile=s.profile||{name:s.name,logo:'',motto:'',term:'Term 1'};s.classes=s.classes||{};s.staff=s.staff||[];s.fees=s.fees||{structures:[],payments:[]};s.attendance=s.attendance||[];s.payroll=s.payroll||[];s.discipline=s.discipline||[];s.books=s.books||[];s.onlineExams=s.onlineExams||[];s.homework=s.homework||[];s.parents=s.parents||[];s.students=s.students||[];Object.entries(s.classes).forEach(([cn,c])=>Object.values(c.students||{}).forEach(st=>{if(!s.students.some(x=>x.adm===st.adm)){s.students.push({...st,className:cn,parentPhone:st.parentPhone||''})}}));return s}
+function kSave(s){saveSchool(kInit(s))}
+function kAllStudents(s){let a=[];Object.entries(s.classes||{}).forEach(([cn,c])=>Object.values(c.students||{}).forEach(st=>a.push({...st,className:cn,parentPhone:st.parentPhone||''})));(s.students||[]).forEach(st=>{if(!a.some(x=>x.adm===st.adm))a.push(st)});return a}
+function kCan(section){let r=current.role;if(['HOE','HOS','PRINCIPAL'].includes(r))return true;if(r==='PARENT')return ['dashboard','results','fees','attendance','homework','reports'].includes(section);if(r==='LEARNER')return ['dashboard','results','attendance','exams','homework','library'].includes(section);if(r==='DEPUTY')return ['dashboard','setup','students','staff','results','fees','attendance','discipline','library','reports','exams','homework'].includes(section);if(r==='SECRETARY')return ['dashboard','setup','students','attendance','reports'].includes(section);if(r==='CT')return ['dashboard','students','attendance','discipline','results','homework','reports','library'].includes(section);if(r==='TR')return ['dashboard','results','exams','homework','reports'].includes(section);if(r==='HOD')return ['dashboard','results','staff','reports','exams','homework'].includes(section);if(r==='BURSAR')return ['dashboard','fees','payroll','reports'].includes(section);if(r==='LIBRARIAN')return ['dashboard','library','students','reports'].includes(section);return ['dashboard'].includes(section)}
+function render(){let s=school();if(!s)return logout();s=kInit(s);kSave(s);let role=current.role;if(['HOE','HOS','PRINCIPAL','CT','TR','HOD','BURSAR','LIBRARIAN','LEARNER','PARENT','DEPUTY','SECRETARY'].includes(role)){renderKirwa(s);return}if(role==='HOE')renderHOE(s);else if(role==='CT')renderCT(s);else if(role==='TR')renderTR(s);else renderHOS(s)}
+function renderKirwa(s){let nav=KIRWA_SECTIONS.filter(x=>kCan(x[0]));if(!nav.some(x=>x[0]===KIRWA_TAB))KIRWA_TAB='dashboard';$('modules').innerHTML=`<div class="kirwa-shell"><aside class="kirwa-side" id="kirwaSide"><div class="kirwa-brand">🦅 KIRWA <small style="display:block;font-size:.72rem;color:#94a3b8">SCHOOL MANAGEMENT SUITE</small></div>${nav.map(x=>`<button class="${KIRWA_TAB===x[0]?'active':''}" onclick="kGo('${x[0]}')">${x[1]} &nbsp; ${x[2]}</button>`).join('')}<button onclick="downloadSchoolBackup()">⬇ Backup Data</button><button onclick="logout()">↪ Sign out</button></aside><main class="kirwa-main"><div class="kirwa-top"><button class="kirwa-menu-toggle" onclick="document.getElementById('kirwaSide').classList.toggle('open')">☰ Menu</button><input id="kirwaSearch" placeholder="Search learners, fees, exams, homework, staff..." value="${esc(KIRWA_QUERY)}" oninput="kSearch(this.value)"><button class="small" style="width:auto" onclick="kGo('dashboard')">Home</button></div><div id="kirwaContent">${kPage(s)}</div></main></div>`}
+function kGo(t){KIRWA_TAB=t;pushHistory();render()}
+function kSearch(v){KIRWA_QUERY=v;let s=school(),q=v.toLowerCase().trim();if(!q){$('kirwaContent').innerHTML=kPage(s);return}let rows=[];kAllStudents(s).filter(x=>(x.name+' '+x.adm+' '+x.className).toLowerCase().includes(q)).forEach(x=>rows.push([x.name,x.adm,x.className,'Learner']));(s.staff||[]).filter(x=>(x.name+' '+x.email+' '+x.role).toLowerCase().includes(q)).forEach(x=>rows.push([x.name||x.email,x.phone||'',x.role,'Staff']));(s.fees.payments||[]).filter(x=>(x.adm+' '+x.name).toLowerCase().includes(q)).forEach(x=>rows.push([x.name,x.adm,x.amount+' KSh','Fee payment']));(s.homework||[]).filter(x=>(x.title+' '+x.className).toLowerCase().includes(q)).forEach(x=>rows.push([x.title,x.className,x.due||'', 'Homework']));$('kirwaContent').innerHTML=`<div class="card"><h3>Search results for “${esc(v)}”</h3>${table(['Name / Title','ADM / Phone','Class / Details','Type'],rows)}</div>`}
+function kPage(s){let n=kAllStudents(s),staff=s.staff||[];if(KIRWA_TAB==='dashboard'){let paid=(s.fees.payments||[]).reduce((a,x)=>a+Number(x.amount||0),0),today=new Date().toISOString().slice(0,10),att=s.attendance.filter(x=>x.date===today);return `<div class="card"><h2>Welcome to ${esc(s.profile.name||s.name||'KIRWA')}</h2><p class="kirwa-muted">${esc(s.profile.motto||'School Management • Learning • Performance • Administration')} | ${esc(s.profile.term||'')}</p></div><div class="kirwa-cards">${[['Learners',n.length],['Classes',Object.keys(s.classes).length],['Teachers / Staff',staff.length],['Assessments',(s.exams||[]).length+(s.onlineExams||[]).length],['Fees Collected','KSh '+paid.toLocaleString()],['Attendance Today',att.length]].map(x=>`<div class="stat"><b>${x[1]}</b>${x[0]}</div>`).join('')}</div><div class="card"><h3>Quick Actions</h3><div class="kirwa-action">${[['students','Add Student'],['results','Enter Results'],['fees','Record Fee'],['attendance','Mark Attendance'],['exams','Create Online Exam'],['homework','Assign Homework']].filter(x=>kCan(x[0])).map(x=>`<button onclick="kGo('${x[0]}')">${x[1]}</button>`).join('')}</div></div><div class="card"><h3>Recent Announcements</h3>${(s.broadcasts||[]).slice(-5).reverse().map(x=>`<p class="kirwa-item">${esc(x.msg)} <small>${esc(x.date)}</small></p>`).join('')||'<p class="kirwa-muted">No announcements yet.</p>'}</div>`}
+if(KIRWA_TAB==='setup')return kSetup(s);
+if(KIRWA_TAB==='students')return kStudents(s);
+if(KIRWA_TAB==='staff')return kStaff(s);
+if(KIRWA_TAB==='results')return kResults(s);
+if(KIRWA_TAB==='fees')return kFees(s);
+if(KIRWA_TAB==='attendance')return kAttendance(s);
+if(KIRWA_TAB==='payroll')return kPayroll(s);
+if(KIRWA_TAB==='discipline')return kDiscipline(s);
+if(KIRWA_TAB==='library')return kLibrary(s);
+if(KIRWA_TAB==='reports')return kReports(s);
+if(KIRWA_TAB==='exams')return kExams(s);
+if(KIRWA_TAB==='homework')return kHomework(s);
+if(KIRWA_TAB==='accounts')return kAccounts(s);
+return '<div class="card">Section unavailable.</div>'}
+function kClassSelect(s,id='') {return `<select id="${id}">${Object.keys(s.classes).map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('')}</select>`}
+function kLearnerSelect(s,id='') {return `<select id="${id}">${kAllStudents(s).map(x=>`<option value="${esc(x.adm)}">${esc(x.name)} (${esc(x.adm)}) — ${esc(x.className)}</option>`).join('')}</select>`}
+function kSetup(s){return `<div class="card"><h2>🏫 School Setup</h2><div class="kirwa-two"><div><label>School name</label><input id="kSchoolName" value="${esc(s.profile.name||s.name)}"><label>School motto</label><input id="kMotto" value="${esc(s.profile.motto||'')}"><label>School logo (image)</label><input id="kLogo" type="file" accept="image/*"><label>Current term</label><select id="kTerm"><option ${s.profile.term==='Term 1'?'selected':''}>Term 1</option><option ${s.profile.term==='Term 2'?'selected':''}>Term 2</option><option ${s.profile.term==='Term 3'?'selected':''}>Term 3</option></select><button onclick="kSaveProfile()">Save School Profile</button></div><div><h3>Add Class / Stream</h3><label>Class name</label><input id="kClassName" placeholder="Form 1 A, Grade 6, PP1"><label>Curriculum</label><select id="kSystem"><option value="CBC">CBE / CBC</option><option value="844">8-4-4</option></select><label>Subjects (comma separated)</label><textarea id="kSubjects" placeholder="English, Mathematics, Science"></textarea><button onclick="kAddClass()">Add Class</button></div></div><h3>Classes</h3>${table(['Class','Curriculum','Subjects','Learners','Action'],Object.entries(s.classes).map(([c,x])=>[esc(c),x.system,esc((x.subjects||[]).join(', ')),Object.keys(x.students||{}).length,`<button class="small danger" onclick="kDeleteClass('${encodeURIComponent(c)}')">Delete</button>`]))}</div>`}
+function kSaveProfile(){let s=school();s.profile.name=$('kSchoolName').value.trim();s.name=s.profile.name;s.profile.motto=$('kMotto').value.trim();s.profile.term=$('kTerm').value;let f=$('kLogo').files[0];if(f){let r=new FileReader();r.onload=()=>{s.profile.logo=r.result;kSave(s);render()};r.readAsDataURL(f)}else{kSave(s);render()}msg('School profile saved.')}
+function kAddClass(){let s=school(),name=$('kClassName').value.trim(),system=$('kSystem').value,subjects=$('kSubjects').value.split(',').map(x=>x.trim()).filter(Boolean);if(!name||!subjects.length)return alert('Enter class name and subjects.');if(s.classes[name])return alert('Class already exists.');s.classes[name]={system,subjects,students:{}};kSave(s);render();msg('Class added.')}
+function kDeleteClass(c0){let c=decodeURIComponent(c0),s=school();if(!confirm('Delete class '+c+' and its class roster?'))return;delete s.classes[c];kSave(s);render()}
+function kStudents(s){let a=kAllStudents(s);return `<div class="card"><h2>👨‍🎓 Students</h2><div class="kirwa-two"><div><h3>Add Student</h3><label>Full name</label><input id="ksName"><label>Admission number</label><input id="ksAdm"><label>Class</label>${kClassSelect(s,'ksClass')}<label>Parent / Guardian phone</label><input id="ksPhone" type="tel"><button onclick="kAddStudent()">Save Student</button></div><div><h3>Find Student</h3><input id="ksFilter" placeholder="Search by name or admission" oninput="kFilterStudents()"><p class="kirwa-muted">Edit or remove records from the list.</p></div></div><div id="kStudentRows">${kStudentTable(a)}</div></div>`}
+function kStudentTable(a){return table(['Name','ADM','Class','Parent Phone','Action'],a.map(x=>[esc(x.name),esc(x.adm),esc(x.className),esc(x.parentPhone||'—'),`<button class="small" onclick="kEditStudent('${encodeURIComponent(x.adm)}')">Edit</button> <button class="small danger" onclick="kDeleteStudent('${encodeURIComponent(x.adm)}')">Delete</button>`]))}
+function kAddStudent(){let s=school(),name=$('ksName').value.trim(),adm=$('ksAdm').value.trim(),cls=$('ksClass').value,phone=$('ksPhone').value.trim();if(!name||!adm||!cls)return alert('Enter name, admission number and class.');if(kAllStudents(s).some(x=>x.adm===adm))return alert('Admission number already exists.');s.classes[cls].students[adm]={adm,name,parentPhone:phone,marks:{}};s.students.push({adm,name,className:cls,parentPhone:phone});kSave(s);render();msg('Student added.')}
+function kFilterStudents(){let q=$('ksFilter').value.toLowerCase();$('kStudentRows').innerHTML=kStudentTable(kAllStudents(school()).filter(x=>(x.name+' '+x.adm+' '+x.className).toLowerCase().includes(q)))}
+function kEditStudent(a0){let adm=decodeURIComponent(a0),s=school(),st=kAllStudents(s).find(x=>x.adm===adm);if(!st)return;let name=prompt('Learner name',st.name);if(name===null)return;let phone=prompt('Parent phone',st.parentPhone||'');if(phone===null)return;Object.values(s.classes).forEach(c=>{if(c.students[adm]){c.students[adm].name=name;c.students[adm].parentPhone=phone}});s.students=s.students.filter(x=>x.adm!==adm);s.students.push({...st,name,parentPhone:phone});kSave(s);render()}
+function kDeleteStudent(a0){let adm=decodeURIComponent(a0),s=school();if(!confirm('Delete this learner record?'))return;Object.values(s.classes).forEach(c=>delete c.students[adm]);s.students=s.students.filter(x=>x.adm!==adm);kSave(s);render()}
+function kStaff(s){return `<div class="card"><h2>👩‍🏫 Teachers / Staff</h2><div class="kirwa-two"><div><label>Name</label><input id="ktName"><label>Email (login ID)</label><input id="ktEmail" type="email"><label>Temporary PIN / Password</label><input id="ktPin" type="password"><label>Staff type</label><select id="ktRole">${['CT','TR','HOD','BURSAR','DEPUTY','LIBRARIAN','SECRETARY','HOS','PRINCIPAL'].map(x=>`<option value="${x}">${({CT:'Class Teacher',TR:'Subject Teacher',HOD:'HOD',BURSAR:'Bursar',DEPUTY:'Deputy',LIBRARIAN:'Librarian',SECRETARY:'Secretary',HOS:'Head of School',PRINCIPAL:'Principal'}[x])}</option>`).join('')}</select><label>Subject</label><input id="ktSubject"><label>Assigned class</label>${kClassSelect(s,'ktClass')}<label>Phone</label><input id="ktPhone"><button onclick="kAddStaff()">Create Staff Account</button></div><div><h3>Staff Directory</h3>${table(['Name','Email','Role','Subject','Phone'],s.staff.map(x=>[esc(x.name||''),esc(x.email),esc(x.role),esc(x.subject||''),esc(x.phone||'')]))}</div></div></div>`}
+function kAddStaff(){let s=school(),name=$('ktName').value.trim(),email=$('ktEmail').value.trim().toLowerCase(),pass=$('ktPin').value,role=$('ktRole').value;if(!name||!email||!pass)return alert('Name, email and PIN are required.');if(s.staff.some(x=>x.email===email)||s.hoe.email===email)return alert('That email is already registered.');s.staff.push({name,email,pass,role,subject:$('ktSubject').value.trim(),className:$('ktClass').value,phone:$('ktPhone').value.trim()});kSave(s);render();msg('Staff account created. Give the staff member their sign-in details privately.')}
+function kResults(s){let a=kAllStudents(s);if(['LEARNER','PARENT'].includes(current.role)){let rows=[];a.forEach(st=>Object.entries(st.marks||{}).forEach(([ex,subs])=>Object.entries(subs).forEach(([sub,m])=>rows.push([esc(ex),esc(sub),m.raw+'/'+m.outOf,m.pct+'%',esc(m.grade||'—')]))));return `<div class="card"><h2>📊 My Results</h2>${table(['Assessment','Subject','Mark','Percentage','Grade'],rows)}</div>`}setTimeout(()=>{let el=document.getElementById('krClass'),sub=document.getElementById('krSubject');if(el&&sub){let fill=()=>{sub.innerHTML=(school().classes[el.value]?.subjects||[]).map(x=>`<option>${esc(x)}</option>`).join('')};el.onchange=fill;fill()}},0);return `<div class="card"><h2>📊 Results / Analytics</h2><div class="kirwa-two"><div><label>Class</label>${kClassSelect(s,'krClass')}<label>Assessment name</label><input id="krExam" placeholder="End Term 1"><label>Subject</label><select id="krSubject"></select><label>Out of</label><input id="krOut" type="number" value="100" min="1"><button onclick="kLoadResults()">Load Mark Entry</button></div><div><h3>Analytics snapshot</h3>${['PARENT','LEARNER'].includes(current.role)?'<p class="kirwa-muted">Your learner results are shown in the reports section.</p>':kAnalytics(s)}</div></div><div id="krLedger"></div></div>`}
+function kAnalytics(s){let vals=[];Object.values(s.classes).forEach(c=>Object.values(c.students).forEach(st=>Object.values(st.marks||{}).forEach(ex=>Object.values(ex).forEach(m=>vals.push(m.pct)))));let mean=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0;return `<div class="kirwa-cards"><div class="stat"><b>${mean}%</b>School mean</div><div class="stat"><b>${vals.length}</b>Marks recorded</div></div>`}
+function kLoadResults(){let s=school(),cls=$('krClass').value,sub=$('krSubject').value,ex=$('krExam').value.trim(),out=Number($('krOut').value);if(!cls||!sub||!ex||out<=0)return alert('Complete the assessment details.');let c=s.classes[cls],students=Object.values(c.students);$('krLedger').innerHTML=`<h3>${esc(cls)} — ${esc(sub)} — ${esc(ex)}</h3>${table(['ADM','Learner','Mark','Grade'],students.map(st=>{let m=st.marks?.[ex]?.[sub];return [esc(st.adm),esc(st.name),`<input class="krMark" data-adm="${esc(st.adm)}" type="number" min="0" max="${out}" value="${m?.raw??''}">`,m?grade(m.pct,c.system):'—']}))}<button onclick="kSaveResults('${encodeURIComponent(cls)}','${encodeURIComponent(sub)}','${encodeURIComponent(ex)}',${out})">Save Results</button>`}
+function kSaveResults(c0,sub0,ex0,out){let cls=decodeURIComponent(c0),sub=decodeURIComponent(sub0),ex=decodeURIComponent(ex0),s=school(),c=s.classes[cls];for(let el of document.querySelectorAll('.krMark'))if(el.value!==''&&(Number(el.value)<0||Number(el.value)>out))return alert('Marks must be between 0 and '+out);document.querySelectorAll('.krMark').forEach(el=>{let st=c.students[el.dataset.adm];st.marks[ex]=st.marks[ex]||{};if(el.value!==''){let p=pct(el.value,out);st.marks[ex][sub]={raw:Number(el.value),outOf:out,pct:p,grade:grade(p,c.system)}}});if(!s.exams.some(x=>x.name===ex))s.exams.push({name:ex,term:s.profile.term,type:'Entered results'});kSave(s);render();msg('Results saved and grades calculated.')}
+function kFees(s){let pay=s.fees.payments.filter(x=>current.role!=='PARENT'&&current.role!=='LEARNER'||x.adm===(current.childAdm||current.learnerAdm)),structures=s.fees.structures;return `<div class="card"><h2>💰 Fees Management</h2><div class="kirwa-two"><div>${['PARENT','LEARNER'].includes(current.role)?'<h3>Fee Account</h3><p class="kirwa-muted">View fee payments and balances for your learner account.</p>':`<h3>Fee Structure</h3><label>Class</label>${kClassSelect(s,'kfClass')}<label>Term</label><input id="kfTerm" value="${esc(s.profile.term)}"><label>Required amount (KSh)</label><input id="kfRequired" type="number" min="0"><button onclick="kFeeStructure()">Save Fee Structure</button><hr><h3>Record Payment</h3><label>Learner</label>${kLearnerSelect(s,'kfAdm')}<label>Amount paid (KSh)</label><input id="kfAmount" type="number" min="1"><label>Payment method</label><select id="kfMethod"><option>M-PESA</option><option>Cash</option><option>Bank</option></select><label>Reference / Receipt No.</label><input id="kfRef"><button onclick="kRecordFee()">Record Payment & Receipt</button>`}</div><div><h3>Fee Structure</h3>${table(['Class','Term','Required'],structures.map(x=>[esc(x.className),esc(x.term),Number(x.amount).toLocaleString()+' KSh']))}<h3>Payments</h3>${table(['Learner','ADM','Amount','Method','Ref'],pay.slice(-20).reverse().map(x=>[esc(x.name),esc(x.adm),Number(x.amount).toLocaleString(),esc(x.method),esc(x.ref||'—')]))}<button onclick="kFeeDefaulters()">Show Fee Balances / Defaulters</button><div id="kfBalance"></div></div></div></div>`}
+function kFeeStructure(){let s=school(),amount=Number($('kfRequired').value);if(!Number.isFinite(amount)||amount<0)return alert('Enter a valid amount.');s.fees.structures.push({className:$('kfClass').value,term:$('kfTerm').value,amount});kSave(s);render()}
+function kRecordFee(){let s=school(),adm=$('kfAdm').value,st=kAllStudents(s).find(x=>x.adm===adm),amount=Number($('kfAmount').value);if(!st||amount<=0)return alert('Select a learner and enter a valid payment.');let p={...st,amount,method:$('kfMethod').value,ref:$('kfRef').value.trim(),date:new Date().toLocaleString()};s.fees.payments.push(p);kSave(s);printReport('Fee Receipt',`<h3>OFFICIAL FEE RECEIPT</h3><p>Receipt: ${esc(p.ref||'Not supplied')}</p><p>Learner: ${esc(p.name)} (${esc(p.adm)})</p><p>Class: ${esc(p.className)}</p><p>Paid: KSh ${amount.toLocaleString()}</p><p>Method: ${esc(p.method)}</p><p>Date: ${esc(p.date)}</p>`);render()}
+function kFeeDefaulters(){let s=school(),rows=[];kAllStudents(s).forEach(st=>{let due=s.fees.structures.filter(x=>x.className===st.className).reduce((a,x)=>a+Number(x.amount),0),paid=s.fees.payments.filter(x=>x.adm===st.adm).reduce((a,x)=>a+Number(x.amount),0);rows.push([esc(st.name),esc(st.adm),due.toLocaleString(),paid.toLocaleString(),Math.max(0,due-paid).toLocaleString()])});$('kfBalance').innerHTML=table(['Learner','ADM','Required','Paid','Balance'],rows)}
+function kAttendance(s){return `<div class="card"><h2>✅ Attendance</h2>${['PARENT','LEARNER'].includes(current.role)?'<p class="kirwa-muted">Attendance record for your learner account.</p>':`<label>Date</label><input id="kaDate" type="date" value="${new Date().toISOString().slice(0,10)}"><label>Class</label>${kClassSelect(s,'kaClass')}<button onclick="kLoadAttendance()">Load Attendance Register</button><div id="kaRows"></div>`}<h3>Attendance Records</h3><button class="secondary" onclick="document.getElementById('kaSummary').innerHTML=kAttendanceSummary()">Show Attendance Percentage</button><div id="kaSummary"></div>${table(['Date','ADM','Learner','Class','Status'],s.attendance.filter(x=>current.role!=='PARENT'&&current.role!=='LEARNER'||x.adm===(current.childAdm||current.learnerAdm)).slice(-30).reverse().map(x=>[esc(x.date),esc(x.adm),esc(x.name),esc(x.className),esc(x.status)]))}</div>`}
+function kLoadAttendance(){let s=school(),cls=$('kaClass').value,date=$('kaDate').value,students=Object.values(s.classes[cls]?.students||{});$('kaRows').innerHTML=table(['ADM','Learner','Status'],students.map(st=>[esc(st.adm),esc(st.name),`<select class="kaStatus" data-adm="${esc(st.adm)}"><option>Present</option><option>Absent</option><option>Late</option></select>`]))+`<button onclick="kSaveAttendance('${encodeURIComponent(cls)}','${date}')">Save Daily Attendance</button>`}
+function kSaveAttendance(c0,date){let cls=decodeURIComponent(c0),s=school();document.querySelectorAll('.kaStatus').forEach(el=>{let st=s.classes[cls].students[el.dataset.adm];s.attendance.push({date,adm:st.adm,name:st.name,className:cls,status:el.value})});kSave(s);render();msg('Attendance saved.')}
+function kPayroll(s){return `<div class="card"><h2>💵 Staff Payroll</h2><div class="kirwa-two"><div><label>Staff member</label><select id="kpStaff">${s.staff.map((x,i)=>`<option value="${i}">${esc(x.name||x.email)}</option>`).join('')}</select><label>Month</label><input id="kpMonth" type="month" value="${new Date().toISOString().slice(0,7)}"><label>Gross salary (KSh)</label><input id="kpGross" type="number"><label>Deductions (KSh)</label><input id="kpDeduct" type="number" value="0"><button onclick="kAddPayroll()">Generate Payslip</button></div><div><h3>Payroll History</h3>${table(['Staff','Month','Gross','Deductions','Net'],s.payroll.slice().reverse().map(x=>[esc(x.name),esc(x.month),Number(x.gross).toLocaleString(),Number(x.deductions).toLocaleString(),Number(x.net).toLocaleString()]))}</div></div></div>`}
+function kAddPayroll(){let s=school(),st=s.staff[Number($('kpStaff').value)],gross=Number($('kpGross').value),ded=Number($('kpDeduct').value);if(!st||gross<0||ded<0||ded>gross)return alert('Check staff and salary amounts.');let p={name:st.name||st.email,month:$('kpMonth').value,gross,deductions:ded,net:gross-ded};s.payroll.push(p);kSave(s);printReport('Staff Payslip',`<h3>${esc(p.name)}</h3><p>Month: ${esc(p.month)}</p><p>Gross: KSh ${gross.toLocaleString()}</p><p>Deductions: KSh ${ded.toLocaleString()}</p><h3>Net Pay: KSh ${p.net.toLocaleString()}</h3>`);render()}
+function kDiscipline(s){return `<div class="card"><h2>⚠️ Discipline</h2><label>Learner</label>${kLearnerSelect(s,'kdAdm')}<label>Offence / Incident</label><textarea id="kdOffence"></textarea><label>Action / Guidance given</label><textarea id="kdAction"></textarea><button onclick="kAddDiscipline()">Record Case</button><h3>Discipline Register</h3>${table(['Date','Learner','ADM','Offence','Action'],s.discipline.slice().reverse().map(x=>[esc(x.date),esc(x.name),esc(x.adm),esc(x.offence),esc(x.action)]))}</div>`}
+function kAddDiscipline(){let s=school(),st=kAllStudents(s).find(x=>x.adm===$('kdAdm').value),offence=$('kdOffence').value.trim();if(!st||!offence)return alert('Select learner and describe the incident.');s.discipline.push({date:new Date().toLocaleDateString(),...st,offence,action:$('kdAction').value.trim()});kSave(s);render()}
+function kLibrary(s){return `<div class="card"><h2>📚 Library</h2><div class="kirwa-two">${['LEARNER','PARENT'].includes(current.role)?'':`<div><label>Book title</label><input id="klTitle"><label>Author</label><input id="klAuthor"><label>Copies</label><input id="klCopies" type="number" min="1" value="1"><button onclick="kAddBook()">Add Book</button></div><div><label>Borrower</label>${kLearnerSelect(s,'klAdm')}<label>Book</label><select id="klBook">${s.books.map((b,i)=>`<option value="${i}">${esc(b.title)} — ${b.available} available</option>`).join('')}</select><button onclick="kBorrowBook()">Issue Book</button>`}<div><h3>${['LEARNER','PARENT'].includes(current.role)?'My Borrowed Books':'Borrowed Books'}</h3>${table(['Book','Learner','ADM','Status','Action'],s.books.flatMap((b,i)=>b.loans.map((l,j)=>[esc(b.title),esc(l.name),esc(l.adm),l.returned?'Returned':'Borrowed',l.returned?'—':`<button class="small" onclick="kReturnBook(${i},${j})">Return</button>`])))}</div></div><h3>Library Catalogue</h3>${table(['Title','Author','Total Copies','Available'],s.books.map(b=>[esc(b.title),esc(b.author),b.copies,b.available]))}</div>`}
+function kAddBook(){let s=school(),title=$('klTitle').value.trim(),copies=Number($('klCopies').value);if(!title||copies<1)return alert('Enter title and valid copies.');s.books.push({title,author:$('klAuthor').value.trim(),copies,available:copies,loans:[]});kSave(s);render()}
+function kBorrowBook(){let s=school(),b=s.books[Number($('klBook').value)],st=kAllStudents(s).find(x=>x.adm===$('klAdm').value);if(!b||!st||b.available<1)return alert('Select an available book and learner.');b.available--;b.loans.push({...st,returned:false,date:new Date().toLocaleDateString()});kSave(s);render()}
+function kReturnBook(i,j){let s=school(),b=s.books[i];if(!b?.loans[j]||b.loans[j].returned)return;b.loans[j].returned=true;b.available++;kSave(s);render()}
+function kReports(s){let a=kAllStudents(s),rows=a.map(st=>{let c=s.classes[st.className],marks=[];Object.values(st.marks||{}).forEach(ex=>Object.values(ex).forEach(m=>marks.push(m.pct)));let mean=marks.length?Math.round(marks.reduce((x,y)=>x+y,0)/marks.length):0;return [st,mean,c?grade(mean,c.system):'—']}).sort((x,y)=>y[1]-x[1]);return `<div class="card"><h2>📋 HOD / Reports</h2><div class="kirwa-action"><button onclick="kPrintResults()">Print Full School Report</button><button class="secondary" onclick="downloadSchoolBackup()">Export School Data (JSON)</button></div><h3>School Ranking / Analytics</h3>${table(['Rank','Learner','ADM','Class','Mean','Grade'],rows.map((x,i)=>[i+1,esc(x[0].name),esc(x[0].adm),esc(x[0].className),x[1]+'%',x[2]]))}<h3>HOD Subject Summary</h3>${table(['Subject','Marks recorded','Mean %'],kSubjectStats(s))}</div>`}
+function kSubjectStats(s){let m={};Object.values(s.classes).forEach(c=>Object.values(c.students).forEach(st=>Object.values(st.marks||{}).forEach(ex=>Object.entries(ex).forEach(([sub,v])=>{m[sub]=m[sub]||[];m[sub].push(v.pct)}))));return Object.entries(m).map(([sub,v])=>[esc(sub),v.length,Math.round(v.reduce((a,b)=>a+b,0)/v.length)+'%'])}
+function kPrintResults(){let s=school(),rows=[];kAllStudents(s).forEach(st=>{let vals=[];Object.values(st.marks||{}).forEach(ex=>Object.values(ex).forEach(m=>vals.push(m.pct)));let mean=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0;rows.push([esc(st.adm),esc(st.name),esc(st.className),mean+'%'])});printReport('Full School Results',table(['ADM','Learner','Class','Mean'],rows))}
+function kExams(s){return `<div class="card"><h2>📝 Online Exams</h2><p class="alert">Teacher can create a quiz and publish it for a class. Learner attempts are saved once per exam on this device. Camera monitoring is not forced; use school-approved, consent-based supervision rather than covert photo capture.</p><div class="kirwa-two">${['LEARNER','PARENT'].includes(current.role)?'':`<div><h3>Teacher Panel — Create Exam</h3><label>Exam title</label><input id="keTitle"><label>Class</label>${kClassSelect(s,'keClass')}<label>Questions (one per line: Question | option A | option B | option C | option D | correct option A/B/C/D)</label><textarea id="keQuestions" rows="8" placeholder="2 + 2 = ? | 3 | 4 | 5 | 6 | B"></textarea><button onclick="kCreateExam()">Publish Exam</button></div>`}<div><h3>Published Exams</h3>${s.onlineExams.map((e,i)=>`<div class="kirwa-item"><b>${esc(e.title)}</b> — ${esc(e.className)}<p class="kirwa-muted">${e.questions.length} questions • ${e.attempts.length} attempts</p><button class="small" onclick="kStartExam(${i})">Open Learner Panel</button>${e.attempts.map((a,j)=>`<p class="kirwa-muted">${esc(a.name)} (${esc(a.adm)}): ${a.score}/${a.total} ${a.cancelled?'• CANCELLED':''} <button class="small danger" onclick="kCancelAttempt(${i},${j})">${a.cancelled?'Restore':'Cancel / Score 0'}</button></p>`).join('')}</div>`).join('')||'No exams published.'}</div></div><div id="keTake"></div></div>`}
+function kCreateExam(){let s=school(),title=$('keTitle').value.trim(),cls=$('keClass').value,lines=$('keQuestions').value.split('\n').map(x=>x.trim()).filter(Boolean),questions=[];if(!title||!cls||!lines.length)return alert('Enter exam title, class and questions.');for(let line of lines){let p=line.split('|').map(x=>x.trim());if(p.length!==6||!['A','B','C','D'].includes(p[5].toUpperCase()))return alert('Each line must have a question, four options and correct answer A/B/C/D.');questions.push({q:p[0],opts:p.slice(1,5),ans:p[5].toUpperCase()})}s.onlineExams.push({title,className:cls,questions,attempts:[],date:new Date().toLocaleString()});kSave(s);render();msg('Exam published.')}
+function kStartExam(i){let s=school(),e=s.onlineExams[i],adm=prompt('Enter learner admission number');if(!adm)return;let st=kAllStudents(s).find(x=>x.adm===adm&&x.className===e.className);if(!st)return alert('Learner not found in this exam class.');if(e.attempts.some(x=>x.adm===adm))return alert('This learner has already submitted this exam.');let qs=e.questions.map((q,j)=>({...q,orig:j})).sort(()=>Math.random()-.5);$('keTake').innerHTML=`<div class="card"><h3>${esc(e.title)} — ${esc(st.name)}</h3>${qs.map((q,j)=>`<div class="kirwa-item"><b>${j+1}. ${esc(q.q)}</b>${q.opts.map((o,k)=>`<label><input style="width:auto" type="radio" name="ke${j}" value="${'ABCD'[k]}"> ${'ABCD'[k]}. ${esc(o)}</label>`).join('')}</div>`).join('')}<button onclick="kSubmitExam(${i},'${encodeURIComponent(adm)}')">Submit One Attempt</button></div>`}
+function kSubmitExam(i,adm0){let s=school(),e=s.onlineExams[i],adm=decodeURIComponent(adm0),st=kAllStudents(s).find(x=>x.adm===adm),answers=[],score=0;let blocks=[...document.querySelectorAll('#keTake .kirwa-item')];blocks.forEach((b,j)=>{let picked=b.querySelector('input:checked')?.value||'',q=e.questions.find(x=>x.q===b.querySelector('b').textContent.replace(/^\d+\. /,''));let correct=q?.ans===picked;if(correct)score++;answers.push({picked,correct})});if(e.attempts.some(x=>x.adm===adm))return alert('Attempt already submitted.');e.attempts.push({adm,name:st.name,score,total:e.questions.length,answers,date:new Date().toLocaleString()});kSave(s);$('keTake').innerHTML=`<div class="alert">Submitted. Score: ${score}/${e.questions.length} (${Math.round(score/e.questions.length*100)}%).</div>`}
+function kHomework(s){return `<div class="card"><h2>📄 PDF Homework</h2><div class="kirwa-two">${['LEARNER','PARENT'].includes(current.role)?'':`<div><h3>Teacher — Upload / Assign PDF</h3><label>Title</label><input id="khTitle"><label>Class</label>${kClassSelect(s,'khClass')}<label>Due date</label><input id="khDue" type="date"><label>PDF file</label><input id="khFile" type="file" accept="application/pdf"><button onclick="kUploadHomework()">Publish Homework PDF</button></div>`}<div><h3>Homework Assigned</h3>${s.homework.map((h,i)=>`<div class="kirwa-item"><b>${esc(h.title)}</b><p>${esc(h.className)} • Due ${esc(h.due||'Not set')}</p><button class="small" onclick="kDownloadHomework(${i})">Download PDF</button><label>Submit answer (photo or PDF)</label><input type="file" id="khSubmit${i}" accept="application/pdf,image/*"><button class="small" onclick="kSubmitHomework(${i})">Submit Answer</button><p class="kirwa-muted">${h.submissions.length} submissions received</p>${['HOE','HOS','PRINCIPAL','CT','TR','HOD'].includes(current.role)?h.submissions.map((sub,j)=>`<div class="kirwa-item">${esc(sub.name)} — ${esc(sub.fileName)} <button class="small" onclick="kDownloadSubmission(${i},${j})">Download Answer</button><label>Mark / comment</label><input id="khMark${i}_${j}" placeholder="Mark" value="${esc(sub.mark||'')}"><input id="khComment${i}_${j}" placeholder="Comment" value="${esc(sub.comment||'')}"><button class="small" onclick="kMarkSubmission(${i},${j})">Save Feedback</button></div>`).join(''):''}</div>`).join('')||'No homework yet.'}</div></div><div id="khTeacherReview"></div></div>`}
+function kUploadHomework(){let s=school(),file=$('khFile').files[0],title=$('khTitle').value.trim();if(!file||!title)return alert('Choose a PDF and enter a title.');if(file.type!=='application/pdf')return alert('Please select a PDF file.');if(file.size>1500000)return alert('For browser storage, keep each PDF below 1.5 MB.');let reader=new FileReader();reader.onload=()=>{s.homework.push({title,className:$('khClass').value,due:$('khDue').value,fileName:file.name,data:reader.result,submissions:[]});try{kSave(s);render();msg('Homework PDF published.')}catch(e){alert('Storage is full. Download a backup and remove large files.')}};reader.readAsDataURL(file)}
+function kDownloadHomework(i){let h=school().homework[i];if(!h)return;let a=document.createElement('a');a.href=h.data;a.download=h.fileName||'homework.pdf';a.click()}
+function kSubmitHomework(i){let s=school(),f=$('khSubmit'+i).files[0];if(!f)return alert('Choose your answer file.');if(f.size>1000000)return alert('Keep submissions below 1 MB for browser storage.');let adm=prompt('Enter your admission number');if(!adm)return;let st=kAllStudents(s).find(x=>x.adm===adm);if(!st)return alert('Learner not found.');let r=new FileReader();r.onload=()=>{s.homework[i].submissions.push({adm,name:st.name,fileName:f.name,data:r.result,date:new Date().toLocaleString(),comment:'',mark:''});kSave(s);render();msg('Answer submitted.')};r.readAsDataURL(f)}
+function kAccounts(s){return `<div class="card"><h2>🔐 Login + Accounts</h2><p class="alert">Principal / HOE can create accounts. Each role receives only its allowed sections. Parent access must be linked to the child admission number.</p><h3>Existing accounts</h3>${table(['Name','Login ID','Role','Assigned class'],s.staff.map(x=>[esc(x.name||''),esc(x.email),esc(x.role),esc(x.className||'—')]))}<h3>Parent links</h3>${table(['Parent name','Phone / Login','Child ADM'],s.parents.map(x=>[esc(x.name),esc(x.phone),esc(x.adm)]))}<div class="kirwa-two"><div><h3>Link Parent to Learner</h3><label>Parent name</label><input id="kapName"><label>Parent phone (login ID)</label><input id="kapPhone"><label>Child</label>${kLearnerSelect(s,'kapAdm')}<label>PIN</label><input id="kapPin" type="password"><button onclick="kAddParent()">Create Parent Link</button></div><div><h3>Access roles</h3><p>Learner • Class Teacher • Subject Teacher • HOD • Bursar • Deputy • Librarian • Secretary • Principal / HOE • Parent</p><p class="kirwa-muted">Learners and parents should be assigned individual accounts before sign-in is enabled for them.</p></div></div></div>`}
+function kAddParent(){let s=school(),name=$('kapName').value.trim(),phone=$('kapPhone').value.trim(),adm=$('kapAdm').value,pin=$('kapPin').value;if(!name||!phone||!adm||!pin)return alert('Complete all parent account fields.');s.parents.push({name,phone,adm,pass:pin,role:'PARENT'});kSave(s);render();msg('Parent-child account link created.')}
+// Search and direct access to every section.
+function kQuickOpen(section){kGo(section)}
+// Individual learner and parent sign-in, plus child-scoped data visibility.
+function kAllStudents(s){let a=[];Object.entries(s.classes||{}).forEach(([cn,c])=>Object.values(c.students||{}).forEach(st=>a.push({...st,className:cn,parentPhone:st.parentPhone||''})));(s.students||[]).forEach(st=>{if(!a.some(x=>x.adm===st.adm))a.push(st)});if(current.role==='LEARNER')return a.filter(x=>x.adm===current.learnerAdm);if(current.role==='PARENT')return a.filter(x=>x.adm===current.childAdm);return a}
+function login(){let role=$('loginRole').value,code=$('loginCode').value.trim().toUpperCase(),identity=$('loginEmail').value.trim(),pass=$('loginPass').value,master=$('loginMaster').value,s=allSchools()[code];if(!code||!identity||!pass)return alert('Enter school code, account ID and PIN/password.');if(!s)return alert('School code not found on this device.');let who=null;if(role==='HOE'||role==='HOS'||role==='PRINCIPAL'){if(!master||master!==s.master)return alert('Enter the correct master school password.');if(role==='HOE'){if(s.hoe.email!==identity.toLowerCase()||s.hoe.pass!==pass)return alert('HOE login details are incorrect.')}else if(!(s.staff||[]).some(x=>x.role===role&&x.email===identity.toLowerCase()&&x.pass===pass))return alert('Account not found. Ask the HOE to create it.')}else if(role==='LEARNER'){who=kAllStudents({...s,students:[]}).find(x=>x.adm===identity&&x.pin===pass);if(!who)return alert('Learner admission number or PIN is incorrect.')}else if(role==='PARENT'){who=(s.parents||[]).find(x=>x.phone===identity&&x.pass===pass);if(!who)return alert('Parent phone or PIN is incorrect.')}else{if(master&&master!==s.master)return alert('Incorrect master school password.');who=(s.staff||[]).find(x=>x.role===role&&x.email===identity.toLowerCase()&&x.pass===pass);if(!who)return alert('Staff account details are incorrect or not registered. Ask the HOE to create your account.')}current={code,role,email:identity.toLowerCase(),learnerAdm:role==='LEARNER'?who.adm:null,childAdm:role==='PARENT'?who.adm:null};$('auth').classList.add('hidden');$('portal').classList.remove('hidden');$('userDisplay').textContent=role+' : '+identity;$('schoolDisplay').textContent='School: '+s.name+' ('+code+')';historyViews=[];historyIndex=-1;KIRWA_TAB='dashboard';render();pushHistory();hideMsg()}
+function kStudents(s){let a=kAllStudents(s);return `<div class="card"><h2>👨‍🎓 Students</h2><div class="kirwa-two"><div><h3>Add Student</h3><label>Full name</label><input id="ksName"><label>Admission number</label><input id="ksAdm"><label>Class</label>${kClassSelect(s,'ksClass')}<label>Parent / Guardian phone</label><input id="ksPhone" type="tel"><label>Learner PIN</label><input id="ksPin" type="password" minlength="4"><button onclick="kAddStudent()">Save Student</button></div><div><h3>Find Student</h3><input id="ksFilter" placeholder="Search by name or admission" oninput="kFilterStudents()"><p class="kirwa-muted">Edit or remove records from the list.</p></div></div><div id="kStudentRows">${kStudentTable(a)}</div></div>`}
+function kAddStudent(){let s=school(),name=$('ksName').value.trim(),adm=$('ksAdm').value.trim(),cls=$('ksClass').value,phone=$('ksPhone').value.trim(),pin=$('ksPin').value;if(!name||!adm||!cls||pin.length<4)return alert('Enter name, admission number, class and a PIN of at least 4 characters.');if(kAllStudents({...s,students:[]}).some(x=>x.adm===adm))return alert('Admission number already exists.');s.classes[cls].students[adm]={adm,name,parentPhone:phone,pin,marks:{}};s.students.push({adm,name,className:cls,parentPhone:phone,pin});kSave(s);render();msg('Student account created. Give the admission number and PIN to the learner privately.')}
+function kStartExam(i){let s=school(),e=s.onlineExams[i],adm=current.role==='LEARNER'?current.learnerAdm:prompt('Enter learner admission number');if(!adm)return;let st=kAllStudents({...s,students:[]}).find(x=>x.adm===adm&&x.className===e.className);if(!st)return alert('Learner not found in this exam class.');if(e.attempts.some(x=>x.adm===adm))return alert('This learner has already submitted this exam.');let qs=e.questions.map((q,j)=>({...q,orig:j})).sort(()=>Math.random()-.5);$('keTake').innerHTML=`<div class="card"><h3>${esc(e.title)} — ${esc(st.name)}</h3>${qs.map((q,j)=>`<div class="kirwa-item" data-question="${q.orig}"><b>${j+1}. ${esc(q.q)}</b>${q.opts.map((o,k)=>`<label><input style="width:auto" type="radio" name="ke${j}" value="${'ABCD'[k]}"> ${'ABCD'[k]}. ${esc(o)}</label>`).join('')}</div>`).join('')}<button onclick="kSubmitExam(${i},'${encodeURIComponent(adm)}')">Submit One Attempt</button></div>`}
+function kSubmitExam(i,adm0){let s=school(),e=s.onlineExams[i],adm=decodeURIComponent(adm0),st=kAllStudents({...s,students:[]}).find(x=>x.adm===adm),score=0,answers=[];let blocks=[...document.querySelectorAll('#keTake .kirwa-item')];blocks.forEach(b=>{let qi=Number(b.dataset.question),picked=b.querySelector('input:checked')?.value||'',correct=e.questions[qi].ans===picked;if(correct)score++;answers.push({question:qi,picked,correct})});if(e.attempts.some(x=>x.adm===adm))return alert('Attempt already submitted.');e.attempts.push({adm,name:st.name,score,total:e.questions.length,answers,date:new Date().toLocaleString()});kSave(s);$('keTake').innerHTML=`<div class="alert">Submitted. Score: ${score}/${e.questions.length} (${Math.round(score/e.questions.length*100)}%).</div>`}
+
+
+function kCancelAttempt(i,j){let s=school(),a=s.onlineExams[i]?.attempts[j];if(!a)return;if(a.cancelled){a.cancelled=false;a.score=a.originalScore??a.score;delete a.originalScore;a.grade='';}else{if(!confirm('Cancel this attempt and record score 0 with grade Y?'))return;a.originalScore=a.score;a.score=0;a.cancelled=true;a.grade='Y';}kSave(s);render()}
+function kResetAttempt(i,j){let s=school(),e=s.onlineExams[i];if(!e||!confirm('Delete this attempt and allow one new attempt?'))return;e.attempts.splice(j,1);kSave(s);render()}
+function kAttendanceSummary(){let s=school(),map={};s.attendance.forEach(a=>{let k=a.adm;map[k]=map[k]||{name:a.name,adm:k,p:0,t:0};map[k].t++;if(a.status==='Present'||a.status==='Late')map[k].p++});return table(['Learner','ADM','Days Recorded','Attendance %'],Object.values(map).map(x=>[esc(x.name),esc(x.adm),x.t,Math.round(x.p/x.t*100)+'%']))}
+
+
+function kDownloadSubmission(i,j){let sub=school().homework[i]?.submissions[j];if(!sub)return;let a=document.createElement('a');a.href=sub.data;a.download=sub.fileName||'learner-answer';a.click()}
+function kMarkSubmission(i,j){let s=school(),sub=s.homework[i]?.submissions[j];if(!sub)return;sub.mark=$('khMark'+i+'_'+j).value;sub.comment=$('khComment'+i+'_'+j).value;kSave(s);render();msg('Feedback saved.')}
+
+</script>
+
+
+<style>
+/* Kirwa Analytics Developer Edition - security and payment extension */
+.kirwa-security-note{background:#fff7ed;border:1px solid #fdba74;color:#9a3412;padding:11px;border-radius:9px;margin:10px 0;font-size:.88rem}
+.kirwa-payment-panel{border:1px solid #cbd5e1;border-radius:12px;padding:14px;margin-top:14px;background:#f8fafc}
+.kirwa-payment-panel label{margin-top:8px}
+.kirwa-audit{max-height:260px;overflow:auto}
+</style>
+<script>
+/*
+ * Upgrade layer:
+ * - scope staff workspaces to their assigned class/subject
+ * - add basic audit trail and CSV exports
+ * - add a Daraja-ready M-PESA request interface through a server endpoint
+ *
+ * This remains a browser-only developer edition. Real authentication, shared
+ * multi-device storage and Daraja credentials must live on a trusted server.
+ */
+const KIRWA_BASE_CAN=kCan;
+const KIRWA_BASE_CLASS_SELECT=kClassSelect;
+const KIRWA_BASE_LEARNERS=kAllStudents;
+function kStaffRecord(){
+  const s=school();
+  return (s?.staff||[]).find(x=>x.email===current.email&&x.role===current.role)||null;
+}
+function kCan(section){
+  const r=current.role, staff=kStaffRecord();
+  if(['HOE','HOS','PRINCIPAL'].includes(r)) return true;
+  if(r==='CT') return !!staff?.className && ['dashboard','students','attendance','discipline','results','homework','reports','library'].includes(section);
+  if(r==='TR') return !!staff?.className && !!staff?.subject && ['dashboard','results','exams','homework','reports'].includes(section);
+  return KIRWA_BASE_CAN(section);
+}
+function kClassSelect(s,id=''){
+  let names=Object.keys(s.classes||{});
+  const staff=kStaffRecord();
+  if(['CT','TR'].includes(current.role)&&staff?.className) names=names.filter(n=>n===staff.className);
+  if(current.role==='HOD'&&staff?.className) names=names.filter(n=>n===staff.className);
+  return `<select id="${esc(id)}">${names.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('')}</select>`;
+}
+function kAllStudents(s){
+  let a=[];
+  Object.entries(s.classes||{}).forEach(([cn,c])=>Object.values(c.students||{}).forEach(st=>a.push({...st,className:cn,parentPhone:st.parentPhone||''})));
+  (s.students||[]).forEach(st=>{if(!a.some(x=>x.adm===st.adm))a.push(st)});
+  if(current.role==='LEARNER') a=a.filter(x=>x.adm===current.learnerAdm);
+  if(current.role==='PARENT') a=a.filter(x=>x.adm===current.childAdm);
+  const staff=kStaffRecord();
+  if(['CT','TR','HOD'].includes(current.role)&&staff?.className) a=a.filter(x=>x.className===staff.className);
+  return a;
+}
+function kRoleCanEditMarks(cls,sub){
+  if(['HOE','HOS','PRINCIPAL','DEPUTY'].includes(current.role)) return true;
+  const st=kStaffRecord();
+  if(current.role==='CT') return !!st?.className && st.className===cls;
+  if(current.role==='TR') return !!st?.className && !!st?.subject && st.className===cls && st.subject===sub;
+  if(current.role==='HOD') return !!st?.subject && st.subject===sub && (!st.className || st.className===cls);
+  return false;
+}
+const KIRWA_BASE_SAVE_RESULTS=kSaveResults;
+kSaveResults=function(c0,sub0,ex0,out){
+  const cls=decodeURIComponent(c0),sub=decodeURIComponent(sub0);
+  if(school()?.locked) return alert('Marks entry is locked by the Head of Examination.');
+  if(!kRoleCanEditMarks(cls,sub)) return alert('Your account is not assigned to enter marks for this class and subject.');
+  return KIRWA_BASE_SAVE_RESULTS(c0,sub0,ex0,out);
+};
+const KIRWA_BASE_LOAD_RESULTS=kLoadResults;
+kLoadResults=function(){
+  const cls=$('krClass')?.value, sub=$('krSubject')?.value;
+  if(!kRoleCanEditMarks(cls,sub)) return alert('Your account is not assigned to enter marks for this class and subject.');
+  return KIRWA_BASE_LOAD_RESULTS();
+};
+const KIRWA_BASE_LOAD_LEDGER=loadLedger;
+loadLedger=function(){
+  const cls=$('trClass')?.value, sub=$('trSubject')?.value;
+  const st=kStaffRecord();
+  if(current.role==='TR' && st?.className && cls!==st.className) return alert('This class is outside your assignment.');
+  if(current.role==='TR' && st?.subject && sub!==st.subject) return alert('This subject is outside your assignment.');
+  return KIRWA_BASE_LOAD_LEDGER();
+};
+const KIRWA_BASE_ADD_STAFF=kAddStaff;
+kAddStaff=function(){
+  if(!['HOE','HOS','PRINCIPAL'].includes(current.role)) return alert('Only HOE, HOS or Principal can create staff accounts.');
+  return KIRWA_BASE_ADD_STAFF();
+};
+const KIRWA_BASE_ADD_PARENT=kAddParent;
+kAddParent=function(){
+  if(!['HOE','HOS','PRINCIPAL','CT'].includes(current.role)) return alert('You are not allowed to create parent links.');
+  return KIRWA_BASE_ADD_PARENT();
+};
+const KIRWA_BASE_FEE_RECORD=kRecordFee;
+kRecordFee=function(){
+  if(!['HOE','HOS','PRINCIPAL','BURSAR'].includes(current.role)) return alert('Only authorised finance staff can record fee payments.');
+  return KIRWA_BASE_FEE_RECORD();
+};
+const KIRWA_BASE_PAYROLL=kAddPayroll;
+kAddPayroll=function(){
+  if(!['HOE','HOS','PRINCIPAL','BURSAR'].includes(current.role)) return alert('You are not authorised to process payroll.');
+  return KIRWA_BASE_PAYROLL();
+};
+
+/* Extend the existing Fees page with an M-PESA Daraja server hand-off. */
+const KIRWA_BASE_FEES_PAGE=kFees;
+kFees=function(s){
+  const original=KIRWA_BASE_FEES_PAGE(s);
+  const cfg=s.paymentConfig||{};
+  const finance=['HOE','HOS','PRINCIPAL','BURSAR'].includes(current.role);
+  const endpoint=finance?`<label>Secure payment API endpoint (provided by your developer)</label><input id="kMpesaEndpoint" type="url" value="${esc(cfg.endpoint||'')}" placeholder="https://your-domain.co.ke/api/mpesa/stkpush"><button class="secondary" onclick="kSaveMpesaEndpoint()">Save payment endpoint</button>`:'';
+  return original+`<section class="kirwa-payment-panel"><h3>📲 M-PESA payment request</h3>
+    <p class="kirwa-muted">A live Daraja payment requires a secure server. This page sends a request to your server; it does not store Daraja keys or claim a payment is complete before your server verifies the callback.</p>
+    ${endpoint}
+    <label>Phone number (07XXXXXXXX or 2547XXXXXXXX)</label><input id="kMpesaPhone" inputmode="tel" placeholder="07XXXXXXXX">
+    <label>Amount (KSh)</label><input id="kMpesaAmount" type="number" min="1" step="1" placeholder="Amount">
+    <label>Account / Admission number</label><input id="kMpesaAccount" placeholder="Learner admission number">
+    <button onclick="kRequestMpesa()">Send M-PESA STK prompt</button>
+    <div id="kMpesaStatus" class="kirwa-muted" aria-live="polite"></div>
+    <div class="kirwa-security-note">Never paste your Daraja consumer secret, passkey or business credentials into this HTML file. Configure them only on a protected HTTPS server.</div>
+  </section>`;
+};
+function kSaveMpesaEndpoint(){
+  if(!['HOE','HOS','PRINCIPAL','BURSAR'].includes(current.role)) return alert('Not authorised.');
+  const endpoint=$('kMpesaEndpoint')?.value.trim()||'';
+  if(!/^https:\/\/.+/i.test(endpoint)) return alert('Use your secure HTTPS API endpoint.');
+  const s=school();s.paymentConfig=s.paymentConfig||{};s.paymentConfig.endpoint=endpoint;kSave(s);render();msg('Payment endpoint saved on this device. Server-side setup is still required.');
+}
+async function kRequestMpesa(){
+  const s=school(),endpoint=s.paymentConfig?.endpoint;
+  const phone=$('kMpesaPhone')?.value.trim()||'',amount=Number($('kMpesaAmount')?.value),accountReference=$('kMpesaAccount')?.value.trim()||'';
+  const status=$('kMpesaStatus');
+  if(!endpoint) return alert('The school developer must configure the secure payment API endpoint first.');
+  if(!/^https:\/\/.+/i.test(endpoint)) return alert('The payment endpoint must use HTTPS.');
+  if(!/^(\+?254|0)7\d{8}$/.test(phone)) return alert('Enter a valid Kenyan mobile number.');
+  if(!Number.isInteger(amount)||amount<1) return alert('Enter a whole-number amount greater than zero.');
+  if(!accountReference) return alert('Enter the learner admission or fee account reference.');
+  status.textContent='Contacting the school payment server…';
+  try{
+    const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone,amount,accountReference,description:'School fees payment',schoolCode:current.code})});
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok||data.success!==true){
+      status.textContent=data.message||'The server did not confirm the payment request. No payment has been recorded here.';
+      return;
+    }
+    status.textContent=data.message||'STK request accepted by the server. Complete the prompt on the phone; the server must verify the Daraja callback before marking fees as paid.';
+  }catch(err){
+    status.textContent='Could not reach the payment server. Check the endpoint and internet connection. No payment was recorded.';
+  }
+}
+
+/* Account-specific sign-in: retain the assigned role/class/subject in session. */
+const KIRWA_LOGIN_PRE_UPGRADE=login;
+login=function(){
+  const role=$('loginRole').value,code=$('loginCode').value.trim().toUpperCase(),identity=$('loginEmail').value.trim(),pass=$('loginPass').value,master=$('loginMaster').value,s=allSchools()[code];
+  if(!code||!identity||!pass) return alert('Enter school code, account ID and PIN/password.');
+  if(!s) return alert('School code not found on this device.');
+  let who=null,learnerAdm=null,childAdm=null;
+  if(role==='HOE'||role==='HOS'||role==='PRINCIPAL'){
+    if(!master||master!==s.master) return alert('Enter the correct master school password.');
+    if(role==='HOE'){
+      if(s.hoe.email!==identity.toLowerCase()||s.hoe.pass!==pass) return alert('HOE login details are incorrect.');
+    }else{
+      who=(s.staff||[]).find(x=>x.role===role&&x.email===identity.toLowerCase()&&x.pass===pass);
+      if(!who) return alert('Account not found. Ask the HOE to create it.');
+    }
+  }else if(role==='LEARNER'){
+    const learners=[];
+    Object.entries(s.classes||{}).forEach(([cn,c])=>Object.values(c.students||{}).forEach(st=>learners.push({...st,className:cn})));
+    who=learners.find(x=>x.adm===identity&&x.pin===pass);
+    if(!who) return alert('Learner admission number or PIN is incorrect.');
+    learnerAdm=who.adm;
+  }else if(role==='PARENT'){
+    who=(s.parents||[]).find(x=>x.phone===identity&&x.pass===pass);
+    if(!who) return alert('Parent phone or PIN is incorrect.');
+    childAdm=who.adm;
+  }else{
+    who=(s.staff||[]).find(x=>x.role===role&&x.email===identity.toLowerCase()&&x.pass===pass);
+    if(!who) return alert('Staff account details are incorrect or not registered. Ask the HOE to create your account.');
+  }
+  current={code,role,email:identity.toLowerCase(),learnerAdm,childAdm,staffClass:who?.className||'',staffSubject:who?.subject||''};
+  $('auth').classList.add('hidden');$('portal').classList.remove('hidden');
+  $('userDisplay').textContent=role+' : '+identity;
+  $('schoolDisplay').textContent='School: '+s.name+' ('+code+')';
+  historyViews=[];historyIndex=-1;KIRWA_TAB='dashboard';render();pushHistory();hideMsg();
+};
+
+/* Add export of marks in CSV format for spreadsheet use. */
+function kExportMarksCSV(){
+  const s=school(),rows=[['Class','Admission No','Learner','Assessment','Subject','Mark','Out of','Percentage','Grade']];
+  Object.entries(s.classes||{}).forEach(([cls,c])=>Object.values(c.students||{}).forEach(st=>Object.entries(st.marks||{}).forEach(([exam,subs])=>Object.entries(subs).forEach(([sub,m])=>rows.push([cls,st.adm,st.name,exam,sub,m.raw,m.outOf,m.pct,grade(m.pct,c.system)])))));
+  const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download=(current.code||'school')+'_Kirwa_Marks.csv';a.click();URL.revokeObjectURL(url);
+}
+
+/* =========================================================
+   KIRWA REPORT FORMS + RELEASE MERIT LISTS + ROLE LOCK
+   Plain print layouts; CBE and 8-4-4 are kept separate.
+   ========================================================= */
+(function(){
+  const oldCan = kCan;
+  const roleTabs = {
+    HOE:['dashboard','setup','students','staff','results','fees','attendance','payroll','discipline','library','reports','exams','homework','accounts'],
+    HOS:['dashboard','setup','students','staff','results','fees','attendance','payroll','discipline','library','reports','exams','homework','accounts'],
+    PRINCIPAL:['dashboard','setup','students','staff','results','fees','attendance','payroll','discipline','library','reports','exams','homework','accounts'],
+    CT:['dashboard','students','attendance','discipline','results','homework','reports','library'],
+    TR:['dashboard','results','exams','homework'],
+    HOD:['dashboard','results','staff','reports','exams','homework'],
+    BURSAR:['dashboard','fees','payroll'],
+    LIBRARIAN:['dashboard','library'],
+    SECRETARY:['dashboard','setup','students','attendance'],
+    DEPUTY:['dashboard','setup','students','staff','results','fees','attendance','discipline','library','reports','exams','homework'],
+    LEARNER:['dashboard','results','attendance','exams','homework','library'],
+    PARENT:['dashboard','results','fees','attendance','homework']
+  };
+  kCan = function(section){
+    const allowed=roleTabs[current?.role]||['dashboard'];
+    return allowed.includes(section) && oldCan(section);
+  };
+  const baseGo=kGo;
+  kGo=function(tabName){
+    if(!kCan(tabName)){alert('Access locked. This section is not part of your assigned panel.');return;}
+    if(current.role==='CT' && ['students','attendance','discipline','results','homework','reports','library'].includes(tabName) && current.staffClass && !school().classes[current.staffClass]){
+      alert('Your assigned class is not available. Contact the HOE.');return;
+    }
+    baseGo(tabName);
+  };
+  const basePage=kPage;
+  kPage=function(s){
+    if(!kCan(KIRWA_TAB)){KIRWA_TAB='dashboard';}
+    if(KIRWA_TAB==='reports' && current.role==='CT') return kClassReportPanel(s);
+    if(KIRWA_TAB==='reports' && current.role==='HOE') return kReleaseMeritPanel(s);
+    if(KIRWA_TAB==='reports' && current.role!=='HOD' && current.role!=='DEPUTY' && current.role!=='HOS' && current.role!=='PRINCIPAL') {
+      return '<div class="card"><h2>Access locked</h2><p>This report panel is not assigned to your account.</p></div>';
+    }
+    return basePage(s);
+  };
+  const baseSaveResults=kSaveResults;
+  kSaveResults=function(c0,sub0,ex0,out){
+    const cls=decodeURIComponent(c0);
+    if(current.role==='TR'){
+      const st=(school().staff||[]).find(x=>x.email===current.email);
+      if(!st || (st.className && st.className!==cls) || (st.subject && st.subject!==decodeURIComponent(sub0))){
+        alert('Locked: you may only enter marks for your assigned class and subject.');return;
+      }
+    } else if(current.role!=='HOE' && current.role!=='HOS' && current.role!=='PRINCIPAL' && current.role!=='CT' && current.role!=='DEPUTY' && current.role!=='HOD'){
+      alert('You are not authorised to enter marks.');return;
+    }
+    if(current.role==='CT' && current.staffClass && current.staffClass!==cls){alert('Locked: this is not your assigned class.');return;}
+    return baseSaveResults(c0,sub0,ex0,out);
+  };
+  const baseLoadResults=kLoadResults;
+  kLoadResults=function(){
+    const cls=document.getElementById('krClass')?.value, sub=document.getElementById('krSubject')?.value;
+    if(current.role==='CT' && current.staffClass && cls!==current.staffClass){alert('Locked: you can only access your assigned class.');return;}
+    if(current.role==='TR'){
+      const st=(school().staff||[]).find(x=>x.email===current.email);
+      if(!st || (st.className && cls!==st.className) || (st.subject && sub!==st.subject)){alert('Locked: this class or subject is outside your assignment.');return;}
+    }
+    return baseLoadResults();
+  };
+  const baseCreateExam=kCreateExam;
+  kCreateExam=function(){
+    if(!['HOE','HOS','PRINCIPAL','TR','HOD','DEPUTY'].includes(current.role)){alert('Access locked: your account cannot create online exams.');return;}
+    const cls=document.getElementById('keClass')?.value;
+    const st=(school().staff||[]).find(x=>x.email===current.email);
+    if(current.role==='TR' && st && st.className && cls!==st.className){alert('Locked: you can only create exams for your assigned class.');return;}
+    return baseCreateExam();
+  };
+
+  function safeTxt(v){return String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+  function allExams(s){
+    const set=new Set();
+    kAllStudents(s).forEach(st=>Object.keys(st.marks||{}).forEach(e=>set.add(e)));
+    return [...set];
+  }
+  function examOptions(s){
+    const es=allExams(s);
+    return es.length?es.map(e=>`<option value="${safeTxt(e)}">${safeTxt(e)}</option>`).join(''):'<option value="">No assessment results recorded</option>';
+  }
+  function getClassStudents(s,cls){
+    return Object.values(s.classes?.[cls]?.students||{}).map(st=>({...st,className:cls}));
+  }
+  function reportRows(s,cls,exam){
+    const c=s.classes[cls], students=getClassStudents(s,cls);
+    return students.map(st=>{
+      const sub=st.marks?.[exam]||{}, entries=Object.entries(sub);
+      const total=entries.reduce((a,[,m])=>a+Number(m.raw||0),0);
+      const possible=entries.reduce((a,[,m])=>a+Number(m.outOf||100),0);
+      const mean=possible?Math.round(total/possible*100):0;
+      return {st,sub,entries,total,possible,mean,grade:grade(mean,c.system)};
+    }).sort((a,b)=>b.mean-a.mean);
+  }
+  function printPlain(title,body){
+    const w=window.open('','_blank');
+    if(!w){alert('Allow pop-ups to print or save the report.');return;}
+    w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${safeTxt(title)}</title><style>
+      @page{size:A4;margin:14mm}*{box-sizing:border-box}body{font:12px Arial,sans-serif;color:#111;margin:0}
+      h1,h2,h3,p{text-align:center;margin:3px 0}h1{font-size:18px}h2{font-size:15px}
+      .meta{margin:14px 0 8px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+      table{width:100%;border-collapse:collapse;margin:9px 0;font-size:10px}
+      th,td{border:1px solid #333;padding:4px;text-align:left}th{text-align:center}
+      .sign{display:flex;justify-content:space-between;margin-top:38px}.note{margin-top:12px}
+      button{padding:8px 14px;margin:8px}@media print{button{display:none}}
+    </style></head><body>${body}<p><button onclick="window.print()">Print / Save as PDF</button></p></body></html>`);
+    w.document.close();
+  }
+  function schoolHeading(s,title,cls,exam){
+    return `<h1>${safeTxt(s.profile?.name||s.name||'SCHOOL')}</h1><h2>${safeTxt(title)}</h2><p>${safeTxt(cls)} | ${safeTxt(exam)} | ${safeTxt(s.profile?.term||'')}</p>`;
+  }
+  function learnerReport(s,cls,exam,row){
+    const c=s.classes[cls], cbe=c.system==='CBC';
+    const subjects=row.entries.map(([sub,m])=>`<tr><td>${safeTxt(sub)}</td><td>${cbe?grade(Number(m.pct||0),'CBC'):Number(m.raw||0)+' / '+Number(m.outOf||100)}</td>${cbe?'<td>'+safeTxt(grade(Number(m.pct||0),'CBC'))+'</td>':''}</tr>`).join('');
+    const body=schoolHeading(s,cbe?'LEARNER ACHIEVEMENT REPORT':'LEARNER ACADEMIC REPORT',cls,exam)+
+      `<div class="meta"><span>Learner: <b>${safeTxt(row.st.name)}</b></span><span>Admission No: <b>${safeTxt(row.st.adm)}</b></span><span>Stream: <b>${safeTxt(row.st.stream||'—')}</b></span></div>`+
+      `<table><thead><tr><th>Learning Area / Subject</th><th>${cbe?'Achievement Level':'Mark'}</th>${cbe?'<th>Level</th>':''}</tr></thead><tbody>${subjects||'<tr><td colspan="3">No results entered</td></tr>'}</tbody></table>`+
+      `<p style="text-align:left"><b>${cbe?'Overall Achievement Level':'Total Marks'}:</b> ${cbe?row.grade:row.total+' / '+row.possible}</p>`+
+      `<p style="text-align:left"><b>${cbe?'Overall percentage':'Mean Mark'}:</b> ${row.mean}%</p>`+
+      `<p style="text-align:left"><b>Teacher remarks:</b> ______________________________________________</p>`+
+      `<div class="sign"><span>Class Teacher: __________________</span><span>Head Teacher: __________________</span></div>`;
+    return body;
+  }
+  function kClassReportPanel(s){
+    const cls=current.staffClass||'';
+    if(!cls || !s.classes[cls]) return `<div class="card"><h2>Class Report Forms</h2><p>Your account has no assigned class. Ask the HOE to assign your class.</p></div>`;
+    return `<div class="card"><h2>Class Report Forms — ${safeTxt(cls)}</h2><p>Only learners in your assigned class are listed. Select an assessment, then print individual learner reports or the entire class set.</p><label>Assessment</label><select id="kctReportExam">${examOptions(s)}</select><div class="kirwa-action"><button onclick="kPrintClassReports()">Print / Download All Class Reports</button></div><h3>Learners</h3>${table(['Admission No','Learner','Stream','Action'],getClassStudents(s,cls).map(st=>[safeTxt(st.adm),safeTxt(st.name),safeTxt(st.stream||'—'),`<button class="small" onclick="kPrintOneClassReport('${encodeURIComponent(st.adm)}')">Print report</button>`]))}</div>`;
+  }
+  window.kPrintOneClassReport=function(admEnc){
+    const s=school(),cls=current.staffClass,adm=decodeURIComponent(admEnc),exam=document.getElementById('kctReportExam')?.value;
+    if(current.role!=='CT'||!cls||!s.classes[cls])return alert('Access locked.');
+    const row=reportRows(s,cls,exam).find(x=>x.st.adm===adm);if(!row)return alert('Learner not found in your class.');
+    printPlain('Learner Report',learnerReport(s,cls,exam,row));
+  };
+  window.kPrintClassReports=function(){
+    const s=school(),cls=current.staffClass,exam=document.getElementById('kctReportExam')?.value;
+    if(current.role!=='CT'||!cls||!s.classes[cls])return alert('Access locked.');
+    const rows=reportRows(s,cls,exam);
+    if(!rows.length)return alert('No learners are registered in your assigned class.');
+    printPlain('Class Learner Reports',rows.map(r=>learnerReport(s,cls,exam,r)).join('<div style="page-break-after:always"></div>'));
+  };
+  function kReleaseMeritPanel(s){
+    if(current.role!=='HOE')return `<div class="card"><h2>Access locked</h2><p>Only HOE can release whole-grade and whole-form merit lists.</p></div>`;
+    const classes=Object.keys(s.classes||{});
+    return `<div class="card"><h2>Examination Release — Merit Lists</h2><p>Each grade/form has its own list. CBE and 8-4-4 are generated using separate grading formats.</p><label>Grade / Form</label><select id="khoeMeritClass">${classes.map(c=>`<option value="${safeTxt(c)}">${safeTxt(c)}</option>`).join('')}</select><label>Assessment</label><select id="khoeMeritExam">${examOptions(s)}</select><div class="kirwa-action"><button onclick="kPrintMeritList()">Generate / Download Merit List</button></div></div>`;
+  }
+  window.kPrintMeritList=function(){
+    if(current.role!=='HOE')return alert('Access locked: only HOE can generate release merit lists.');
+    const s=school(),cls=document.getElementById('khoeMeritClass')?.value,exam=document.getElementById('khoeMeritExam')?.value,c=s.classes[cls];
+    if(!c)return alert('Select a valid grade or form.');
+    const rows=reportRows(s,cls,exam),cbe=c.system==='CBC';
+    const subjectNames=[...new Set(rows.flatMap(r=>r.entries.map(([sub])=>sub)))];
+    const streamNames=[...new Set(rows.map(r=>r.st.stream||'Unspecified'))];
+    const subjectHeader=subjectNames.map(x=>`<th>${safeTxt(x)}</th>`).join('');
+    const listRows=rows.map((r,i)=>`<tr><td>${i+1}</td><td>${safeTxt(r.st.adm)}</td><td>${safeTxt(r.st.name)}</td><td>${safeTxt(r.st.stream||'—')}</td>${subjectNames.map(sub=>{const m=r.sub[sub];return `<td>${m?(cbe?grade(Number(m.pct||0),'CBC'):Number(m.raw||0)):'—'}</td>`}).join('')}<td>${cbe?r.grade:r.total}</td><td>${cbe?'—':r.mean+'%'}</td></tr>`).join('');
+    let summary='';
+    if(cbe){
+      const counts={EE:0,ME:0,AE:0,BE:0};rows.forEach(r=>{const p=r.grade.slice(0,2);if(counts[p]!==undefined)counts[p]++;});
+      summary=`<h3>Achievement Summary</h3><p>EE: ${counts.EE} &nbsp; ME: ${counts.ME} &nbsp; AE: ${counts.AE} &nbsp; BE: ${counts.BE}</p><h3>Top Performers</h3><p>${rows.slice(0,10).map((r,i)=>`${i+1}. ${safeTxt(r.st.name)} (${r.grade})`).join(' | ')||'No results'}</p>`;
+    }else{
+      const gc={A:0,B:0,C:0,D:0,E:0};rows.forEach(r=>{const g=r.grade[0];if(gc[g]!==undefined)gc[g]++;});
+      summary=`<h3>Grade Distribution</h3><p>${Object.entries(gc).map(([g,n])=>g+': '+n).join(' | ')}</p><h3>Top 10 Performers</h3><p>${rows.slice(0,10).map((r,i)=>`${i+1}. ${safeTxt(r.st.name)} (${r.mean}%)`).join(' | ')||'No results'}</p>`;
+    }
+    const streamSummary=streamNames.map(stream=>{
+      const sr=rows.filter(r=>(r.st.stream||'Unspecified')===stream);
+      return `<p><b>${safeTxt(stream)}:</b> ${sr.slice(0,cbe?10:3).map((r,i)=>`${i+1}. ${safeTxt(r.st.name)} (${r.grade})`).join(', ')||'No results'}</p>`;
+    }).join('');
+    const bestWeak=subjectNames.map(sub=>{
+      const vals=rows.map(r=>r.sub[sub]).filter(Boolean).map(m=>Number(m.pct||0));
+      return {sub,mean:vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0};
+    }).sort((a,b)=>b.mean-a.mean);
+    const subjectAnalysis=`<h3>Subject Analysis</h3><p>Best: ${bestWeak.length?safeTxt(bestWeak[0].sub)+' ('+Math.round(bestWeak[0].mean)+'%)':'—'} | Weakest: ${bestWeak.length?safeTxt(bestWeak[bestWeak.length-1].sub)+' ('+Math.round(bestWeak[bestWeak.length-1].mean)+'%)':'—'}</p>`;
+    const body=schoolHeading(s,cbe?'WHOLE GRADE CBE RELEASE MERIT LIST':'WHOLE FORM 8-4-4 RELEASE MERIT LIST',cls,exam)+
+      `<p style="text-align:left">Total learners: <b>${rows.length}</b></p><table><thead><tr><th>Position</th><th>ADM</th><th>Full Name</th><th>Stream</th>${subjectHeader}<th>${cbe?'Overall Level':'Total'}</th><th>${cbe?'':'Mean'}</th></tr></thead><tbody>${listRows}</tbody></table>${summary}<h3>Stream Top Performers</h3>${streamSummary}${subjectAnalysis}<p class="note">Teacher's remarks: ______________________________________________________________</p><div class="sign"><span>Head Teacher: __________________</span><span>Signature / Stamp: ______________</span></div>`;
+    printPlain('Merit List — '+cls,body);
+  };
+})();
+
+</script>
+
+
+
+<!-- KIRWA ANALYTICS SUBSCRIPTION EXTENSION -->
+<script>
+/* KIRWA_SUBSCRIPTIONS_V2
+   New schools receive a 60-day free school subscription trial from account creation.
+   After the trial: KSh 150 per registered learner / 30 days.
+   Learner: KSh 30 / 30 days. Parent: KSh 30 / 30 days.
+   Paid subscriptions activate only after the HTTPS backend verifies the Daraja payment.
+*/
+(function(){
+  const SCHOOL_RATE=150, INDIVIDUAL_RATE=30, PERIOD_DAYS=30, TRIAL_DAYS=60;
+  const oldKInit=window.kInit;
+  window.kInit=function(s){
+    s=oldKInit(s);
+    s.subscriptions=s.subscriptions||{school:null,learners:{},parents:{},payments:[]};
+    s.subscriptions.learners=s.subscriptions.learners||{};
+    s.subscriptions.parents=s.subscriptions.parents||{};
+    s.subscriptions.payments=s.subscriptions.payments||[];
+    // Existing schools are not silently granted a new trial; only account creation sets trial dates.
+    s.paymentConfig=s.paymentConfig||{};
+    return s;
+  };
+  function save(s){kSave(s)}
+  function allLearners(s){
+    const out=[]; Object.entries(s.classes||{}).forEach(([cn,c])=>Object.values(c.students||{}).forEach(st=>{if(!out.some(x=>x.adm===st.adm))out.push({...st,className:cn})}));
+    (s.students||[]).forEach(st=>{if(!out.some(x=>x.adm===st.adm))out.push(st)}); return out;
+  }
+  function expiryActive(rec){return !!(rec&&rec.status==='paid'&&rec.expiresAt&&Date.now()<new Date(rec.expiresAt).getTime())}
+  function expiryText(rec){return expiryActive(rec)?new Date(rec.expiresAt).toLocaleString():'Not active'}
+  function trialActive(s){const end=s.subscriptions?.trialEndsAt;return !!(end&&Date.now()<new Date(end).getTime()&&!expiryActive(s.subscriptions?.school))}
+  function trialDaysLeft(s){const end=s.subscriptions?.trialEndsAt;if(!end)return 0;return Math.max(0,Math.ceil((new Date(end).getTime()-Date.now())/86400000))}
+  function schoolActive(s){return expiryActive(s.subscriptions?.school)||trialActive(s)}
+  function schoolExpiryText(s){return expiryActive(s.subscriptions?.school)?expiryText(s.subscriptions.school):(trialActive(s)?new Date(s.subscriptions.trialEndsAt).toLocaleString():'Not active')}
+  function individualRecord(s,role){
+    if(role==='LEARNER')return s.subscriptions.learners[current.learnerAdm]||null;
+    if(role==='PARENT')return s.subscriptions.parents[current.email]||null;
+    return null;
+  }
+  function individualActive(s,role){return expiryActive(individualRecord(s,role))}
+  function roleIsStaff(role){return !['LEARNER','PARENT'].includes(role)}
+  function paymentEndpoint(s){return s.paymentConfig?.endpoint||''}
+  function subscriptionCard(s,kind){
+    const count=allLearners(s).length, amount=kind==='school'?count*SCHOOL_RATE:INDIVIDUAL_RATE;
+    const rec=kind==='school'?s.subscriptions.school:individualRecord(s,current.role);
+    const active=kind==='school'?schoolActive(s):expiryActive(rec), onTrial=kind==='school'&&trialActive(s), daysLeft=onTrial?trialDaysLeft(s):0;
+    const id=kind==='school'?'school':(current.role==='LEARNER'?current.learnerAdm:current.email);
+    const title=kind==='school'?'School subscription':'Your '+(current.role==='LEARNER'?'learner':'parent')+' subscription';
+    return `<section class="card kirwa-payment-panel" style="border:2px solid #0284c7;margin-top:14px">
+      <h2>💳 ${title}</h2>
+      ${kind==='school'?`<div class="kirwa-cards"><div class="stat"><b>${count}</b>Registered learners</div><div class="stat"><b>KSh ${amount.toLocaleString()}</b>Monthly amount due (150 × learners)</div></div>`:`<div class="stat"><b>KSh 30</b>Monthly access subscription</div>`}
+      <p style="margin:10px 0"><b>Status:</b> ${onTrial?'FREE 2-MONTH TRIAL — '+daysLeft+' day(s) remaining':(active?'PAID — access active':'PAYMENT REQUIRED')}<br><b>${onTrial?'Free trial ends':'Expiry'}:</b> ${kind==='school'?schoolExpiryText(s):expiryText(rec)}</p>
+      ${kind==='school'&&onTrial?`<div class="alert"><b>Your school subscription is free during this trial.</b><br>After the trial, the monthly charge will be KSh ${SCHOOL_RATE} × ${count} registered learners = <b>KSh ${amount.toLocaleString()}</b> per month. Learner and parent subscriptions are separate.</div>`:''}
+      ${onTrial?'':`<label>M-PESA phone number</label><input id="ksubPhone" inputmode="tel" placeholder="07XXXXXXXX or 2547XXXXXXXX">
+      ${kind==='school'?'<label>Payment description</label><input value="Kirwa Analytics school subscription" disabled>':''}
+      ${!paymentEndpoint(s)?`<label>Secure Daraja API endpoint (developer configuration)</label><input id="ksubEndpoint" type="url" placeholder="https://your-domain.co.ke/api/mpesa/subscription"><button class="secondary" onclick="kSubSaveEndpoint()">Save secure payment endpoint</button>`:''}
+      <button onclick="kSubPay('${kind}','${encodeURIComponent(String(id))}',${amount})">${active?'Renew subscription':'Pay subscription'} — KSh ${amount.toLocaleString()}</button>`}
+      <div id="ksubStatus" class="kirwa-muted" style="margin-top:8px" aria-live="polite"></div>
+      <div class="kirwa-security-note">Access is unlocked only after the secure server verifies the M-PESA callback. Do not put Daraja secrets or passkeys in this HTML file.</div>
+    </section>`;
+  }
+  window.kSubSaveEndpoint=function(){
+    if(!['HOE','HOS','PRINCIPAL'].includes(current.role))return alert('Only authorised school administrators can configure the payment endpoint.');
+    const endpoint=document.getElementById('ksubEndpoint')?.value.trim()||'';
+    if(!/^https:\/\/.+/i.test(endpoint))return alert('Enter a valid HTTPS endpoint.');
+    const s=school();s.paymentConfig=s.paymentConfig||{};s.paymentConfig.endpoint=endpoint;save(s);render();msg('Secure M-PESA endpoint saved. Backend configuration is still required.');
+  };
+  window.kSubPay=async function(kind,idEnc,amount){
+    const s=school(),endpoint=paymentEndpoint(s),phone=document.getElementById('ksubPhone')?.value.trim()||'',status=document.getElementById('ksubStatus');
+    if(kind==='school'&&trialActive(s))return alert('Your school is still in its 2-month free trial. No school subscription payment is due yet.');
+    if(!endpoint)return alert('The secure M-PESA endpoint has not been configured.');
+    if(!/^https:\/\/.+/i.test(endpoint))return alert('The payment endpoint must use HTTPS.');
+    if(!/^((\+?254)|0)7\d{8}$/.test(phone))return alert('Enter a valid Kenyan Safaricom phone number.');
+    if(!Number.isInteger(amount)||amount<1)return alert('There are no registered learners to bill yet, or the amount is invalid.');
+    const target=decodeURIComponent(idEnc);
+    const targetKind=kind==='school'?'school':(current.role==='LEARNER'?'learner':'parent');
+    const payload={action:'stkpush',purpose:targetKind+'_subscription',schoolCode:current.code,accountReference:target,phone,amount,currency:'KES',periodDays:PERIOD_DAYS,learnerCount:kind==='school'?allLearners(s).length:undefined};
+    status.textContent='Sending secure M-PESA STK request…';
+    try{
+      const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      const data=await res.json().catch(()=>({}));
+      if(!res.ok||data.success!==true||!data.requestId){status.textContent=data.message||'The server did not accept the payment request. No subscription was activated.';return;}
+      s.subscriptions.pending=s.subscriptions.pending||{};s.subscriptions.pending[data.requestId]={kind:targetKind,target,amount,createdAt:new Date().toISOString(),phone};save(s);
+      status.textContent='STK prompt sent. Complete the payment on your phone, then tap Verify Payment below.';
+      const btn=document.createElement('button');btn.className='success';btn.textContent='Verify M-PESA Payment';btn.onclick=()=>kSubVerify(data.requestId);status.appendChild(document.createElement('br'));status.appendChild(btn);
+    }catch(e){status.textContent='Could not reach the payment server. No payment or subscription was recorded.';}
+  };
+  window.kSubVerify=async function(requestId){
+    const s=school(),endpoint=paymentEndpoint(s),status=document.getElementById('ksubStatus');
+    if(!endpoint)return alert('Payment endpoint missing.');
+    if(status)status.textContent='Checking verified payment status…';
+    try{
+      const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'verify',requestId,schoolCode:current.code})});
+      const data=await res.json().catch(()=>({}));
+      if(!res.ok||data.verified!==true||data.status!=='paid'){
+        if(status)status.textContent=data.message||'Payment is not yet verified. The subscription remains locked. Try verification again after completing the STK prompt.';return;
+      }
+      const pending=s.subscriptions.pending?.[requestId];if(!pending)return alert('This payment request is not recognised on this device. Contact school support.');
+      const paidAt=data.paidAt?new Date(data.paidAt):new Date();
+      const expiry=new Date(paidAt);expiry.setDate(expiry.getDate()+PERIOD_DAYS);
+      const rec={status:'paid',amount:pending.amount,paidAt:paidAt.toISOString(),expiresAt:expiry.toISOString(),receipt:data.receipt||data.mpesaReceiptNumber||'',requestId,verifiedByServer:true};
+      if(pending.kind==='school')s.subscriptions.school=rec;
+      else if(pending.kind==='learner')s.subscriptions.learners[pending.target]=rec;
+      else s.subscriptions.parents[pending.target]=rec;
+      s.subscriptions.payments.push({kind:pending.kind,account:pending.target,...rec});delete s.subscriptions.pending[requestId];save(s);
+      if(status)status.textContent='Payment verified by the server. Subscription activated until '+expiry.toLocaleString()+'.';
+      render();msg('M-PESA payment verified. Subscription access is now active.');
+    }catch(e){if(status)status.textContent='Unable to verify with the payment server. No access was unlocked.';}
+  };
+
+  const oldPage=window.kPage;
+  window.kPage=function(s){
+    s=kInit(s);
+    if(KIRWA_TAB==='dashboard'){
+      let html=oldPage(s);
+      if(current.role==='HOS'||current.role==='HOE'||current.role==='PRINCIPAL') html+=subscriptionCard(s,'school');
+      if(current.role==='LEARNER'||current.role==='PARENT') html+=subscriptionCard(s,'individual');
+      return html;
+    }
+    if(roleIsStaff(current.role)&&!schoolActive(s)&&!['setup','students','accounts'].includes(KIRWA_TAB))
+      return `<div class="card"><h2>School subscription expired</h2><p>School management functions are locked until the HOS renews the school subscription. School setup and learner registration remain available.</p>${subscriptionCard(s,'school')}</div>`;
+    if((current.role==='LEARNER'||current.role==='PARENT')&&(!schoolActive(s)||!individualActive(s,current.role)))
+      return `<div class="card"><h2>Panel locked — subscription required</h2><p>Your school and personal subscription must both be active to use this panel.</p>${!schoolActive(s)?'<p>Ask the HOS to renew the school subscription.</p>':''}${subscriptionCard(s,'individual')}</div>`;
+    return oldPage(s);
+  };
+  const oldGo=window.kGo;
+  window.kGo=function(tab){
+    const s=kInit(school());
+    if(roleIsStaff(current.role)&&!schoolActive(s)&&!['dashboard','setup','students','accounts'].includes(tab)){
+      alert('School subscription required. The HOS must renew it before this function can be used.');KIRWA_TAB='dashboard';render();return;
+    }
+    if((current.role==='LEARNER'||current.role==='PARENT')&&(!schoolActive(s)||!individualActive(s,current.role))&&tab!=='dashboard'){
+      alert('Your panel is locked until the school and your personal subscription are active.');KIRWA_TAB='dashboard';render();return;
+    }
+    return oldGo(tab);
+  };
+
+  /* Enforce the same checks on direct function calls, not only navigation. */
+  function requireSchool(){if(schoolActive(kInit(school())))return true;alert('School subscription expired. Ask the HOS to pay the monthly school subscription.');return false}
+  ['kAddStaff','kSaveResults','kLoadResults','kCreateExam','kCreateHomework','kRecordFee','kAddPayroll','kMarkAttendance','kAddBook','kAddDiscipline'].forEach(name=>{
+    const fn=window[name];if(typeof fn==='function')window[name]=function(...args){if(!['HOE','HOS','PRINCIPAL'].includes(current.role)&&!requireSchool())return;return fn.apply(this,args)};
+  });
+  const oldLogin=window.login;
+  window.login=function(){
+    oldLogin();
+    if(!current.role)return;
+    const s=kInit(school());
+    if(roleIsStaff(current.role)&&!schoolActive(s)&&!['HOE','HOS','PRINCIPAL'].includes(current.role)){
+      alert('School subscription is not active. Ask the HOS to renew it.');logout();return;
+    }
+    if(current.role==='LEARNER'&&!schoolActive(s)){alert('The school subscription is not active. Contact the HOS.');logout();return;}
+    if(current.role==='PARENT'&&!schoolActive(s)){alert('The school subscription is not active. Contact the HOS.');logout();return;}
+    if(current.role==='LEARNER'&&!individualActive(s,'LEARNER')){KIRWA_TAB='dashboard';render();}
+    if(current.role==='PARENT'&&!individualActive(s,'PARENT')){KIRWA_TAB='dashboard';render();}
+  };
+})();
+</script>
+
+</body></html>
